@@ -30,6 +30,7 @@ public class TestUser {
 			}
 			String jsonStr = sb.toString();
 			
+			
 			JsonReader reader = Json.createReader(new StringReader(jsonStr));
 			JsonObject userJson = reader.readObject();
 			JsonArray userArr = userJson.get("users").asJsonArray();
