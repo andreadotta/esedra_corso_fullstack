@@ -130,7 +130,7 @@ public class UserDao implements Dao<User>{
 			//lo riscrivo da zero
 			for (User line : users) {
 				//se il id corrisponde a quello in input non lo scrivo
-				if (!line.getUserId().equals(id)) {
+				if (line.getUserId().compareTo(id) != 0) {
 					this.save(line);
 				}				
 			}
