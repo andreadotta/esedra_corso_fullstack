@@ -1,6 +1,7 @@
 package it.esedra.corso.shoppinglist.model;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -108,8 +109,41 @@ public class UserDao implements Dao<User>{
 	 */
 	@Override
 	public void delete(BigInteger id) throws DaoException {
-		// TODO Auto-generated method stub
-		
+		File db = null;
+		File dbclone = null;
+		try {
+			//cerco tutti i shopping list
+			SortedSet<User> users = this.find(new UserBuilder().build());
+			//rinominiamo il file
+			//prendo il file del db
+			db = new File(GetFileResource.get(fileName, folderName).toPath().toString());
+			//clono il file del db
+			dbclone = new File(GetFileResource.get(fileName, folderName).toPath().toString() + ".temp");
+			// ma prima verifico che non esista già
+			if (dbclone.exists()) {
+				dbclone.delete();
+			}
+			// clono effettettivamente il file del db
+			db.renameTo(dbclone);
+			///elimino il file del db
+			db.delete();
+			//lo riscrivo da zero
+			for (User line : users) {
+				//se il id corrisponde a quello in input non lo scrivo
+				if (!line.getUserId().equals(id)) {
+					this.save(line);
+				}				
+			}
+		} catch (Exception e) {
+			//cancello il file nuovo del db 
+			db.delete();
+			//ripristino il vecchio file del db
+			dbclone.renameTo(db);
+			throw new DaoException(e.getMessage());
+		} finally {
+			//eliminio il clone che avevo fatto per salvare i dati in caso di errore
+			dbclone.delete();
+		}
 	}
 
 	@Override
