@@ -36,45 +36,47 @@ public class UserDao implements Dao<User>{
 		fieldsMap = Collections.unmodifiableMap(tmpMap);
 
 	}
+	
+
 	/**
 	 * TODO Implementare Parte per Update
 	 */
 	@Override
 	public void save(User t) throws DaoException {
 		try {
+
+			File file = new File(GetFileResource.get(fileName, folderName).toPath().toString());
+			if (file.exists() && find(t).contains(t)) {
+				this.delete(t.getUserId());
+			}
+
 			BufferedWriter writer = new BufferedWriter(
 					new FileWriter(GetFileResource.get(fileName, folderName).toPath().toString(), true));
 			StringBuilder builder = new StringBuilder();
-			if ((t.getUserId().equals(BigInteger.ONE) || t.getUserId().compareTo(User.getLastId()) > 0)
-					&& !find(t).contains(t)) {
-				builder.append(t.getUserId());
-				builder.append(fieldSeparator);
-				builder.append(t.getFirstName());
-				builder.append(fieldSeparator);
-				builder.append(t.getLastName());
-				builder.append(fieldSeparator);
-				builder.append(t.getEmail());
-				builder.append(fieldSeparator);
-				builder.append(t.getMobilePhone());
-				builder.append(fieldSeparator);
-				builder.append(t.isActive());
-				builder.append(fieldSeparator);
-				builder.append(t.isPrivacyConsent());
-				builder.append(fieldSeparator);
-				builder.append(t.isNewsletter());
-				builder.append(fieldSeparator);
-				builder.append(System.getProperty("line.separator"));
-				writer.write(builder.toString());
-				writer.flush();
-				writer.close();
-				System.out.println("User " + t.getFirstName() + " salvato");
-				t.addToStoredUsers(t);
-			} else {
-//				Implementazione del blocco per l'update o chiamata ad un metodo apposito
-				System.out.println("no user stored or updated!");
-			}
+			builder.append(t.getUserId());
+			builder.append(fieldSeparator);
+			builder.append(t.getFirstName());
+			builder.append(fieldSeparator);
+			builder.append(t.getLastName());
+			builder.append(fieldSeparator);
+			builder.append(t.getEmail());
+			builder.append(fieldSeparator);
+			builder.append(t.getMobilePhone());
+			builder.append(fieldSeparator);
+			builder.append(t.isActive());
+			builder.append(fieldSeparator);
+			builder.append(t.isPrivacyConsent());
+			builder.append(fieldSeparator);
+			builder.append(t.isNewsletter());
+			builder.append(fieldSeparator);
+			builder.append(System.getProperty("line.separator"));
+			writer.write(builder.toString());
+			writer.flush();
+			writer.close();
+			System.out.println("User " + t.getFirstName() + " salvato");
+			t.addToStoredUsers(t);
 		} catch (Exception e) {
-			throw new DaoException(e.getMessage());
+			throw new DaoException(e);
 		}
 	}
 
@@ -139,7 +141,7 @@ public class UserDao implements Dao<User>{
 			db.delete();
 			//ripristino il vecchio file del db
 			dbclone.renameTo(db);
-			throw new DaoException(e.getMessage());
+			throw new DaoException(e);
 		} finally {
 			//eliminio il clone che avevo fatto per salvare i dati in caso di errore
 			dbclone.delete();
@@ -167,8 +169,11 @@ public class UserDao implements Dao<User>{
 			}
 			return users;
 		} catch (IOException e) {
+			throw new DaoException("Errore nella scrittura/lettura  del file DB" + e.getMessage());
+		} catch (Exception e) {
 			throw new DaoException(e.getMessage());
 		}
+		
 	}
 
 }
