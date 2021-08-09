@@ -13,9 +13,11 @@ import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 
+import it.esedra.corso.shoppinglist.exceptions.DaoException;
 import it.esedra.corso.shoppinglist.helper.GetFileResource;
 import it.esedra.corso.shoppinglist.model.User;
 import it.esedra.corso.shoppinglist.model.UserBuilder;
+import it.esedra.corso.shoppinglist.model.UserDao;
 
 public class TestUser {
 
@@ -34,6 +36,7 @@ public class TestUser {
 			JsonReader reader = Json.createReader(new StringReader(jsonStr));
 			JsonObject userJson = reader.readObject();
 			JsonArray userArr = userJson.get("users").asJsonArray();
+			UserDao userDao = new UserDao();
 			for(Object el: userArr) {
 				JsonObject tmpUser = (JsonObject)(el);
 				
@@ -47,7 +50,12 @@ public class TestUser {
 						.newsletter(Boolean.parseBoolean(tmpUser.getString("isNewsletter")))
 						.build();
 				user.newUserId();
-				user.store();
+				
+				try {
+					userDao.save(user);
+				} catch (DaoException e) {
+					e.printStackTrace();
+				}
 				Map<BigInteger, User> users = user.getStoredUsers();
 				for(Map.Entry<BigInteger, User> entry: users.entrySet()) {
 					System.out.println("User id: " + entry.getKey() + " - Nome: " + entry.getValue().getFirstName());
