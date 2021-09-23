@@ -1,6 +1,8 @@
 package it.esedra.corso.shoppinglist.model;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import it.esedra.corso.shoppinglist.helper.SequenceManager;
  *
  */
 public class User {
+	private List<ShoppingList> shoppinglists = new ArrayList<ShoppingList>();
 	private static BigInteger id = new BigInteger("0");
 	private BigInteger userId = id;
 	private String firstName;
@@ -38,7 +41,7 @@ public class User {
 	}
 
 	public User(String firstName, String lastName, String email, String mobilePhone,
-			boolean isActive, boolean privacyConsent, boolean newsletter, String uniqueCode) {
+			boolean isActive, boolean privacyConsent, boolean newsletter) {
 		this.userId = newUserId();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -50,6 +53,14 @@ public class User {
 		setUniqueCode();
 	}
 
+	/**
+	 * TODO fare un metodo per creare una shoppinglist collegata all'utente
+	 * 
+	 */
+	public List<ShoppingList> getShoppinglists(){
+		return shoppinglists;
+		
+	}
 	public BigInteger getUserId() {
 		return userId;
 	}

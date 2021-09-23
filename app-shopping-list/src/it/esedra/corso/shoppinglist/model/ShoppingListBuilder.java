@@ -12,12 +12,10 @@ public class ShoppingListBuilder {
 	private BigInteger id;
 	private String uniqueCode;
 
-	public ShoppingListBuilder(List<Product> products, String listName, User user, BigInteger id, String uniqueCode) {
+	public ShoppingListBuilder(List<Product> products, String listName, User user) {
 		this.products = products;
 		this.listName = listName;
 		this.user = user;
-		this.id = id;
-		this.uniqueCode = uniqueCode;
 	}
 
 	public ShoppingListBuilder() {
@@ -29,7 +27,7 @@ public class ShoppingListBuilder {
 	}
 
 	public ShoppingList build() {
-		return new ShoppingList(products, listName, user, id, uniqueCode);
+		return new ShoppingList(products, listName, user);
 	}
 
 	public User getUser() {

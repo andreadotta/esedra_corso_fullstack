@@ -10,6 +10,7 @@ import java.math.BigInteger;
  */
 
 public class Product {
+	private ShoppingList shoppinglist;
 	private String name;
 	private Integer qty;
 	private Unit unit;
@@ -42,13 +43,23 @@ public class Product {
 	public Integer getQty() {
 		return qty;
 	}
+	public void setQty(Integer qty) {
+		this.qty =qty;
+	}
 
 	public Unit getUnit() {
 		return unit;
 	}
 
+	public void setUnit(Unit unit) {
+		this.unit =unit;
+	}
+	
 	public String getName() {
 		return name;
+	}
+	public void setName(String name) {
+		this.name =name;
 	}
 
 	/**

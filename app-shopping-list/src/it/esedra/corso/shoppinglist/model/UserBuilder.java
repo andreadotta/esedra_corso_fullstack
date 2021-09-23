@@ -1,8 +1,11 @@
 package it.esedra.corso.shoppinglist.model;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserBuilder {
+	private List<ShoppingList> shoppinglists = new ArrayList<ShoppingList>();
 	private BigInteger userId;
 	private String firstName;
 	private String lastName;
@@ -35,8 +38,8 @@ public class UserBuilder {
 	}
 	
 	public User build() {
-		return new User(userId, firstName, lastName, email, mobilePhone, isActive,
-			privacyConsent, newsletter, uniqueCode);
+		return new User(firstName, lastName, email, mobilePhone, isActive,
+			privacyConsent, newsletter);
 	}
 
 	public UserBuilder firstName(String firstName) {

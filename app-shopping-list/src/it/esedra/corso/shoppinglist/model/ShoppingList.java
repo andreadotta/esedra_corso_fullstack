@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import it.esedra.corso.shoppinglist.exceptions.StoreException;
 import it.esedra.corso.shoppinglist.helper.AESHelper;
+import it.esedra.corso.shoppinglist.helper.SequenceManager;
 
 /**
  * 
@@ -25,7 +26,7 @@ public class ShoppingList {
 	private List<Product> products = new ArrayList<Product>();
 	private String listName = new String();
 	private User user;
-	private BigInteger id;
+	private BigInteger id = new BigInteger("0");
 	private String uniqueCode;
 	private static final String fileName = "lista.csv";
 	private static final String folderName = "shoppinglist";
@@ -44,11 +45,11 @@ public class ShoppingList {
 	 * @param id
 	 */
 
-	public ShoppingList(List<Product> products, String listName, User user, BigInteger id) {
+	public ShoppingList(List<Product> products, String listName, User user) {
+		this.id = newShoppingListId();
 		this.products = products;
 		this.listName = listName;
 		this.user = user;
-		this.id = id;
 		setUniqueCode();
 
 	}
@@ -85,8 +86,7 @@ public class ShoppingList {
 		return listName;
 	}
 
-	public static synchronized BigInteger getLastId() throws IOException {
-		BigInteger lastId = null;
-		return lastId;
+	public BigInteger newShoppingListId() {
+		return id = SequenceManager.getInstance().getCurrentIdShoppingList();
 	}	
 }
