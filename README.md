@@ -34,3 +34,10 @@ WIP - Creare un metodo che metta in relazione le stringhe del file csv con la st
 WIP - Utilizzare un sistema univoco per il save di ShoppingList e User: ora sono impiegate le classi PrinterWriter e BufferedWriter.
       BufferedWriter gestisce uno stream buffered mentre PrnterWriter no. L'utilità di avere uno stream buffered è nella gestione degli accessi al file della           base dati  (Il capitolo su input/output stream non è ancora stato affrontato)
  
+### Gestione dell'errore
+
+Abbiamo anche provato a ragionare sul controllo del flusso di gestione delle eccezioni, queste le considerazioni:
+
+Le eccezioni possono essere gestite anche senza essere rilanciate, per esempio utilizzando un logger che salvi uno Stack Trace per poterlo valutare in fase di sviluppo dell'applicazione. 
+L'analisi del flusso logico dell'applicazione è necessario per valutare dove l'eccezione debba essere rilanciata, dove debba essere intercettata da un try/catch e dove sia sufficiente gestirla con un blocco try/catch senza rilanciarla.
+Rilanciare un'eccezione consente di evitare il surrounding con il try/catch, a meno che si debba ricevere un errore di tipo diverso da quello da rilanciare. Tuttavia, per utilizzare un metodo all'interno di uno stream, per esempio con un forEach(), le eccezioni non possono essere rilanciate. Per questo si può gestire l'errore con un logger all'interno del metodo senza rilanciare l'eccezione e utilizzare il metodo in uno stream. In alternativa bisogna includere nello stream un blocco try/catch, rendendo il codice meno sintetico, oltre a non rispettare il corretto utilizzo dello stream che non prevede la gestione dell'errore.
