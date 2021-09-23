@@ -33,9 +33,7 @@ public class ShoppingList {
 	private static final String fieldSeparator = ",";
 	private final static Logger logger = LoggerFactory.getLogger(ShoppingList.class.getName());
 	
-	public static enum Fields {
-		listName, id, uniqueCode
-	}
+	
 	/**
 	 * TODO creare la relazione tra shoppinglist e user per gestire la creazione dell'id della shoppinglist
 	 * 

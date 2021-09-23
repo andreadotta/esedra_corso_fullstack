@@ -23,25 +23,28 @@ import org.slf4j.LoggerFactory;
 import it.esedra.corso.shoppinglist.exceptions.DaoException;
 import it.esedra.corso.shoppinglist.helper.AESHelper;
 import it.esedra.corso.shoppinglist.helper.GetFileResource;
-import it.esedra.corso.shoppinglist.model.ShoppingList.Fields;
 
 public class ShoppingListDao implements Dao<ShoppingList> {
 
 	private String uniqueCode;
-	private static final String fileName = "lista.csv";
+	private static final String fileName = "shoppinglist.csv";
 	private static final String folderName = "shoppinglist";
 	private static final String fieldSeparator = ",";
 	private final static Logger logger = LoggerFactory.getLogger(ShoppingListDao.class.getName());
-
+	
+	public static enum Fields {
+		listName, id, uniqueCode
+	}
+	
 	private final static Map<String, Integer> fieldsMap;
 	static {
 		HashMap<String, Integer> tmpMap = new HashMap<String, Integer>();
 		tmpMap.put(Fields.id.name(), 0);
 		tmpMap.put(Fields.listName.name(), 1);
 		tmpMap.put(Fields.uniqueCode.name(), 2);
-		tmpMap.put(Product.Fields.name.name(), 3);
-		tmpMap.put(Product.Fields.qty.name(), 4);
-		tmpMap.put(Product.Fields.unit.name(), 5);
+//		tmpMap.put(Product.Fields.name.name(), 3);
+//		tmpMap.put(Product.Fields.qty.name(), 4);
+//		tmpMap.put(Product.Fields.unit.name(), 5);
 		fieldsMap = Collections.unmodifiableMap(tmpMap);
 	}
 
@@ -179,6 +182,10 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 		}
 	}
 
+	/**
+	 * TODO: Rivedere il ritorno di un'istanza di ShoppingList al post di una Collection
+	 */
+	
 	@Override
 	public ShoppingList get(BigInteger id) throws DaoException {
 		Collection<ShoppingList> shoppingLists = ShoppingListDao.rowConverter(this.fetchRows());

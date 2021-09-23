@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import it.esedra.corso.shoppinglist.exceptions.DaoException;
 import it.esedra.corso.shoppinglist.helper.GetFileResource;
 import it.esedra.corso.shoppinglist.helper.SequenceManager;
-import it.esedra.corso.shoppinglist.model.User.Fields;
 
 public class UserDao implements Dao<User> {
 
@@ -31,6 +30,9 @@ public class UserDao implements Dao<User> {
 	private final static Map<String, Integer> fieldsMap;
 	private final static Logger logger = LoggerFactory.getLogger(UserDao.class.getName());
 
+	public static enum Fields {
+		userId, firstName, lastName, email, mobilePhone, isActive, isPrivacyConsent, isNewsletter
+	}
 	static {
 		HashMap<String, Integer> tmpMap = new HashMap<String, Integer>();
 		tmpMap.put(Fields.userId.name(), 0);

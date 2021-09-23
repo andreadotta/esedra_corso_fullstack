@@ -29,13 +29,6 @@ public class User {
 	private String uniqueCode;
 	private final static Logger logger = LoggerFactory.getLogger(User.class.getName());
 
-	
-	private static Dao<User> userDao = new UserDao();
-
-	public static enum Fields {
-		userId, firstName, lastName, email, mobilePhone, isActive, isPrivacyConsent, isNewsletter
-	}
-
 	public User() {
 
 	}
