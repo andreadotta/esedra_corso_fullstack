@@ -1,6 +1,8 @@
-package it.esedra.corso.shoppinglist.helpers.test;
+package it.esedra.corso.shoppinglist.test.helpers;
 
-import static org.junit.Assert.assertTrue;
+
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigInteger;
 import java.util.ArrayList;

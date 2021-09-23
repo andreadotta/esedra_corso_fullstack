@@ -1,1 +1,0 @@
-package it.esedra.corso.shoppinglist.helpers.test;
