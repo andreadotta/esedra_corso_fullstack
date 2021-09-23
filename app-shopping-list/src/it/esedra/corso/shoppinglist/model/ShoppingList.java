@@ -28,14 +28,11 @@ public class ShoppingList {
 	private User user;
 	private BigInteger id = new BigInteger("0");
 	private String uniqueCode;
-	private static final String fileName = "lista.csv";
-	private static final String folderName = "shoppinglist";
-	private static final String fieldSeparator = ",";
 	private final static Logger logger = LoggerFactory.getLogger(ShoppingList.class.getName());
-	
-	
+
 	/**
-	 * TODO creare la relazione tra shoppinglist e user per gestire la creazione dell'id della shoppinglist
+	 * TODO creare la relazione tra shoppinglist e user per gestire la creazione
+	 * dell'id della shoppinglist
 	 * 
 	 * @param products
 	 * @param listName
@@ -66,12 +63,12 @@ public class ShoppingList {
 
 	public void setUniqueCode() {
 		try {
-			this.uniqueCode = AESHelper.generateUniqueKey(id,listName);
+			this.uniqueCode = AESHelper.generateUniqueKey(id, listName);
 		} catch (StoreException e) {
 			logger.error(e.getMessage());
 		}
 	}
-	
+
 	public String getUniqueCode() {
 		return uniqueCode;
 	}
@@ -86,5 +83,5 @@ public class ShoppingList {
 
 	public BigInteger newShoppingListId() {
 		return id = SequenceManager.getInstance().getCurrentIdShoppingList();
-	}	
+	}
 }

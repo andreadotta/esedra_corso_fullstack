@@ -1,8 +1,9 @@
 package it.esedra.corso.shoppinglist.model;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -23,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import it.esedra.corso.shoppinglist.exceptions.DaoException;
 import it.esedra.corso.shoppinglist.helper.AESHelper;
 import it.esedra.corso.shoppinglist.helper.GetFileResource;
+import it.esedra.corso.shoppinglist.helper.SequenceManager;
 
 public class ShoppingListDao implements Dao<ShoppingList> {
 
@@ -31,20 +33,17 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 	private static final String folderName = "shoppinglist";
 	private static final String fieldSeparator = ",";
 	private final static Logger logger = LoggerFactory.getLogger(ShoppingListDao.class.getName());
-	
+
 	public static enum Fields {
 		listName, id, uniqueCode
 	}
-	
+
 	private final static Map<String, Integer> fieldsMap;
 	static {
 		HashMap<String, Integer> tmpMap = new HashMap<String, Integer>();
 		tmpMap.put(Fields.id.name(), 0);
 		tmpMap.put(Fields.listName.name(), 1);
 		tmpMap.put(Fields.uniqueCode.name(), 2);
-//		tmpMap.put(Product.Fields.name.name(), 3);
-//		tmpMap.put(Product.Fields.qty.name(), 4);
-//		tmpMap.put(Product.Fields.unit.name(), 5);
 		fieldsMap = Collections.unmodifiableMap(tmpMap);
 	}
 
@@ -147,45 +146,45 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 	public void save(ShoppingList t) throws DaoException {
 		try {
 
-			PrintWriter writer = new PrintWriter(GetFileResource.get(fileName, folderName));
+			BufferedWriter writer = new BufferedWriter(
+					new FileWriter(GetFileResource.get(fileName, folderName).toPath().toString(), true));
 			StringBuilder builder = new StringBuilder();
 
 //			if (t.getUniqueCode() == null) {
 //				t.getUniqueCode = ShoppingList.generateUniqueKey(this.getId(), this.getListName());
 //			}
 
-			for (Product listaTemp : t.getProducts()) {
-				if (listaTemp == null) {
-					continue;
-				}
+			if ((t.getId().equals(BigInteger.ONE)
+					|| t.getId().compareTo(SequenceManager.getInstance().getCurrentIdShoppingList()) > 0)
+					&& !find(t).contains(t)) {
 				builder.append(t.getId());
 				builder.append(fieldSeparator);
 				builder.append(t.getListName());
 				builder.append(fieldSeparator);
+				builder.append(t.getUser());
+				builder.append(fieldSeparator);
 				builder.append(t.getUniqueCode());
 				builder.append(fieldSeparator);
-				builder.append(listaTemp.getName());
-				builder.append(fieldSeparator);
-				builder.append(listaTemp.getQty());
-				builder.append(fieldSeparator);
-				builder.append(listaTemp.getUnit());
-				builder.append(fieldSeparator);
 				builder.append(System.getProperty("line.separator"));
+				writer.write(builder.toString());
+				writer.flush();
+				writer.close();
+				logger.info("ShoppingList " + t.getListName() + " salvata");
 
+			} else {
+				logger.warn("no shoppingList stored or updated!");
 			}
-			writer.write(builder.toString());
-			writer.flush();
-			writer.close();
-
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			throw new DaoException(e.getMessage());
 		}
 	}
 
 	/**
-	 * TODO: Rivedere il ritorno di un'istanza di ShoppingList al post di una Collection
+	 * TODO: Rivedere il ritorno di un'istanza di ShoppingList al post di una
+	 * Collection
 	 */
-	
+
 	@Override
 	public ShoppingList get(BigInteger id) throws DaoException {
 		Collection<ShoppingList> shoppingLists = ShoppingListDao.rowConverter(this.fetchRows());
@@ -223,7 +222,7 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 		return st.stream().map(ShoppingListDao::builderShoppingList).collect(Collectors.toList());
 
 	}
-	
+
 	public static ShoppingList builderShoppingList(List<String[]> shoppingList) {
 
 		ShoppingListBuilder builder = ShoppingListBuilder.builder();

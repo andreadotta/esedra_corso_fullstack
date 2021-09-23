@@ -19,18 +19,19 @@ public class Product {
 	public static enum Fields {
 		name, qty, unit
 	}
-	
-	public Product () {
-		
+
+	public Product() {
+
 	}
-	
+
 	/**
 	 * TODO gestire la generazione dell'id
+	 * 
 	 * @param name
 	 * @param qty
 	 * @param unit
 	 */
-	public Product (String name, Integer qty, Unit unit) {
+	public Product(String name, Integer qty, Unit unit) {
 		this.name = name;
 		this.qty = qty;
 		this.unit = unit;
@@ -43,8 +44,9 @@ public class Product {
 	public Integer getQty() {
 		return qty;
 	}
+
 	public void setQty(Integer qty) {
-		this.qty =qty;
+		this.qty = qty;
 	}
 
 	public Unit getUnit() {
@@ -52,16 +54,20 @@ public class Product {
 	}
 
 	public void setUnit(Unit unit) {
-		this.unit =unit;
+		this.unit = unit;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
-		this.name =name;
+		this.name = name;
 	}
 
+	public BigInteger getId() {
+		return id;
+	}
 	/**
 	 * Restituisce un nuovo oggetto Product
 	 * 
