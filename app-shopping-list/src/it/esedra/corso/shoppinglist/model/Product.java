@@ -13,7 +13,6 @@ public class Product {
 	private String name;
 	private Integer qty;
 	private Unit unit;
-	private String description;
 	private static BigInteger id = new BigInteger("1");
 
 	public static enum Fields {
@@ -24,31 +23,20 @@ public class Product {
 		
 	}
 	
+	/**
+	 * TODO gestire la generazione dell'id
+	 * @param name
+	 * @param qty
+	 * @param unit
+	 */
 	public Product (String name, Integer qty, Unit unit) {
 		this.name = name;
 		this.qty = qty;
 		this.unit = unit;
 	}
 
-	/**
-	 * @return id incrementato di 1
-	 */
 	public BigInteger getSequence() {
 		return id.add(new BigInteger("1"));
-	}
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @param description the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public Integer getQty() {
@@ -62,26 +50,6 @@ public class Product {
 	public String getName() {
 		return name;
 	}
-
-//	public BigInteger getId() {
-//		return id;
-//	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setQty(Integer qty) {
-		this.qty = qty;
-	}
-
-	public void setUnit(Unit unit) {
-		this.unit = unit;
-	}
-
-//	public void setId(BigInteger id) {
-//		this.id = id;
-//	}
 
 	/**
 	 * Restituisce un nuovo oggetto Product

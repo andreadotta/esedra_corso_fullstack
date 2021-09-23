@@ -110,7 +110,6 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 					builder.addProduct(tmpProduct);
 				}
 				shoppingLists.add((ShoppingList) builder.build());
-
 			}
 			return shoppingLists;
 		} catch (IOException e) {
@@ -214,8 +213,25 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 				.groupingBy(s -> s[fieldsMap.get(Fields.uniqueCode.name())], TreeMap::new, Collectors.toList()))
 				.values();
 
-		return st.stream().map(ShoppingList::builderShoppingList).collect(Collectors.toList());
+		return st.stream().map(ShoppingListDao::builderShoppingList).collect(Collectors.toList());
 
+	}
+	
+	public static ShoppingList builderShoppingList(List<String[]> shoppingList) {
+
+		ShoppingListBuilder builder = ShoppingListBuilder.builder();
+
+		builder.listName(shoppingList.get(0)[fieldsMap.get(Fields.listName.name())])
+				.id(new BigInteger(shoppingList.get(0)[fieldsMap.get(Fields.id.name())]))
+				.uniqueCode(shoppingList.get(0)[fieldsMap.get(Fields.uniqueCode.name())]);
+
+		builder.products(shoppingList.stream()
+				.map(s -> new Product(s[fieldsMap.get(Product.Fields.name.name())],
+						Integer.parseInt(s[fieldsMap.get(Product.Fields.qty.name())]),
+						Unit.valueOf(s[fieldsMap.get(Product.Fields.unit.name())])))
+				.collect(Collectors.toList()));
+
+		return builder.build();
 	}
 
 }

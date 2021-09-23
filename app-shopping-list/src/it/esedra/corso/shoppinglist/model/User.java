@@ -1,11 +1,12 @@
 package it.esedra.corso.shoppinglist.model;
 
-import java.io.IOException;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import it.esedra.corso.shoppinglist.exceptions.StoreException;
+import it.esedra.corso.shoppinglist.helper.AESHelper;
 import it.esedra.corso.shoppinglist.helper.SequenceManager;
 
 /**
@@ -23,7 +24,9 @@ public class User {
 	private boolean privacyConsent = false;
 	private boolean newsletter = false;
 	private String uniqueCode;
+	private final static Logger logger = LoggerFactory.getLogger(User.class.getName());
 
+	
 	private static Dao<User> userDao = new UserDao();
 
 	public static enum Fields {
@@ -34,9 +37,9 @@ public class User {
 
 	}
 
-	public User(BigInteger userId, String firstName, String lastName, String email, String mobilePhone,
+	public User(String firstName, String lastName, String email, String mobilePhone,
 			boolean isActive, boolean privacyConsent, boolean newsletter, String uniqueCode) {
-		this.userId = userId;
+		this.userId = newUserId();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -44,7 +47,7 @@ public class User {
 		this.isActive = isActive;
 		this.privacyConsent = privacyConsent;
 		this.newsletter = newsletter;
-		this.uniqueCode = uniqueCode;
+		setUniqueCode();
 	}
 
 	public BigInteger getUserId() {
@@ -86,6 +89,14 @@ public class User {
 	
 	public String getUniqueCode() {
 		return uniqueCode;
+	}
+	
+	public void setUniqueCode() {
+		try {
+			this.uniqueCode = AESHelper.generateUniqueKey(id,email);
+		} catch (StoreException e) {
+			logger.error(e.getMessage());
+		}
 	}
 
 	/**
