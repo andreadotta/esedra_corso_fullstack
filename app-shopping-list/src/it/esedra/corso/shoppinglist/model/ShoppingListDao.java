@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -168,12 +169,12 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 	public Collection<ShoppingList> getAll() throws DaoException {
 		ProductDao pdao = new ProductDao();
 
-		return (Collection<ShoppingList>) ShoppingListDao.rowConverter(this.fetchRows()).stream().map(shoppingList -> {
+		return ShoppingListDao.rowConverter(this.fetchRows()).stream().map(shoppingList -> {
 			ShoppingListBuilder builder = new ShoppingListBuilder();
 			return builder.listName(shoppingList.getListName()).id(shoppingList.getId())
 					.products(pdao.findByShoppingListId(shoppingList.getId())).uniqueCode(shoppingList.getUniqueCode())
 					.user(shoppingList.getUser()).build();
-		});
+		}).collect(Collectors.toList());
 	}
 
 	private List<String[]> fetchRows() throws DaoException {
