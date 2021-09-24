@@ -44,7 +44,18 @@ public class User {
 		this.newsletter = newsletter;
 		setUniqueCode();
 	}
-
+	public User(BigInteger userId, String firstName, String lastName, String email, String mobilePhone, boolean isActive,
+			boolean privacyConsent, boolean newsletter, String uniqueCode) {
+		this.userId = userId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.mobilePhone = mobilePhone;
+		this.isActive = isActive;
+		this.privacyConsent = privacyConsent;
+		this.newsletter = newsletter;
+		this.uniqueCode = uniqueCode;
+	}
 	public List<ShoppingList> getShoppinglists() {
 		return shoppinglists;
 

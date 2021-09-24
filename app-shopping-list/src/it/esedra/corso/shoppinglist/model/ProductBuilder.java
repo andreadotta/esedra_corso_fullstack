@@ -23,12 +23,12 @@ public class ProductBuilder {
 		return new ProductBuilder();
 	}
 
-	public ProductBuilder setName(String name) {
+	public ProductBuilder name(String name) {
 		this.name = name;
 		return this;
 	}
 
-	public ProductBuilder setUnit(Unit unit) {
+	public ProductBuilder unit(Unit unit) {
 		this.unit = unit;
 		return this;
 	}

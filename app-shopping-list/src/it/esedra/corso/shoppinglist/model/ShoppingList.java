@@ -2,6 +2,7 @@ package it.esedra.corso.shoppinglist.model;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -13,7 +14,7 @@ import it.esedra.corso.shoppinglist.helper.SequenceManager;
 
 public class ShoppingList {
 
-	private List<Product> products = new ArrayList<Product>();
+	private Collection<Product> products = new ArrayList<Product>();
 	private String listName;
 	private BigInteger id;
 	private String uniqueCode;
@@ -21,12 +22,12 @@ public class ShoppingList {
 
 	private final static Logger logger = LoggerFactory.getLogger(ShoppingList.class.getName());
 
-	public ShoppingList(String listName, User user) {
-		this.id = newShoppingListId();
+	public ShoppingList(BigInteger id, String listName, String uniqueCode, User user, Collection<Product> products) {
+		this.id = id;
 		this.listName = listName;
 		this.user = user;
-		setUniqueCode();
-
+		this.uniqueCode = uniqueCode;
+		this.products = products;
 	}
 
 	public User getUser() {
@@ -53,7 +54,7 @@ public class ShoppingList {
 		return uniqueCode;
 	}
 
-	public List<Product> getProducts() {
+	public Collection<Product> getProducts() {
 		return products;
 	}
 

@@ -1,7 +1,5 @@
 package it.esedra.corso.shoppinglist.model;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Files;
@@ -11,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -19,8 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import it.esedra.corso.shoppinglist.exceptions.DaoException;
 import it.esedra.corso.shoppinglist.helper.GetFileResource;
-import it.esedra.corso.shoppinglist.helper.SequenceManager;
-import it.esedra.corso.shoppinglist.model.ShoppingListDao.Fields;
 
 public class ProductDao implements Dao<Product> {
 
@@ -70,16 +65,63 @@ public class ProductDao implements Dao<Product> {
 		return null;
 	}
 
+	/**
+	 * Ottengo l'elenco dei prodotti per una specifica shoppingList
+	 * 
+	 * @param shoppingListId
+	 * @return
+	 * @throws DaoException
+	 */
+	public Collection<Product> findByShoppingListId(BigInteger shoppingListId) {
+		/*
+		 * 1. ottengo i prodotti della relazione shoppinglist-products 2. ottengo tutti
+		 * i prodotti 3. restituisco una lista di Product della shoppinglist-products
+		 */
+		Collection<Product> p = null;
+		try {
+			ShoppingListProductDao slpDao = new ShoppingListProductDao();
+			List<Product> products = ProductDao.rowConverter(this.fetchRows()).stream().collect(Collectors.toList());
+			List<ShoppingListProduct> slproducts = slpDao.getAll().stream().collect(Collectors.toList());
+
+			slproducts.stream().filter(slproduct -> slproduct.getShoppingListId().equals(shoppingListId));
+
+			p = products.stream().distinct().filter(slproducts::contains).collect(Collectors.toList());
+		} catch (DaoException e) {
+			e.printStackTrace();
+		}
+		return p;
+	}
+
+	public static Collection<Product> rowConverter(List<String[]> csvRows) throws DaoException {
+		return csvRows.stream().map(ProductDao::builderShoppingList).collect(Collectors.toList());
+	}
+
 	private List<String[]> fetchRows() throws DaoException {
-		throw new DaoException("Not implamented yet");
+		try {
+			List<String> lines = Files.readAllLines(GetFileResource.get(fileName, folderName).toPath());
+
+			return lines.stream().map(s -> s.split(fieldSeparator)).collect(Collectors.toList());
+		} catch (IOException e) {
+			throw new DaoException(e);
+		}
 	}
 
 	/**
-	 * TODO rowConverter
-	 * @throws DaoException 
+	 * Build a Product instance from String[]
+	 * 
+	 * @param shoppingList
+	 * @return
 	 */
-	public static Collection<Product> rowConverter(List<String[]> csvRows) throws DaoException {
-		throw new DaoException("Not implamented yet");
+	public static Product builderShoppingList(String[] product) {
+
+		ProductBuilder builder = ProductBuilder.builder();
+
+		// builder.listName(product[fieldsMap.get(Fields.listName.name())]);
+		builder.id(new BigInteger(product[fieldsMap.get(Fields.id.name())]));
+		builder.name(product[fieldsMap.get(Fields.name.name())]);
+		builder.unit(Unit.valueOf(product[fieldsMap.get(Fields.unit.name())]));
+
+		return builder.build();
 	}
 
 }

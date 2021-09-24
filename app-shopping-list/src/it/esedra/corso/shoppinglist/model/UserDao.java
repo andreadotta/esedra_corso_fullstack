@@ -29,7 +29,7 @@ public class UserDao implements Dao<User> {
 	private final static Logger logger = LoggerFactory.getLogger(UserDao.class.getName());
 
 	public static enum Fields {
-		userId, firstName, lastName, email, mobilePhone, isActive, isPrivacyConsent, isNewsletter
+		userId, firstName, lastName, email, mobilePhone, isActive, isPrivacyConsent, isNewsletter, uniqueCode
 	}
 
 	static {
@@ -42,6 +42,7 @@ public class UserDao implements Dao<User> {
 		tmpMap.put(Fields.isActive.name(), 5);
 		tmpMap.put(Fields.isPrivacyConsent.name(), 6);
 		tmpMap.put(Fields.isNewsletter.name(), 7);
+		tmpMap.put(Fields.uniqueCode.name(), 8);		
 		fieldsMap = Collections.unmodifiableMap(tmpMap);
 
 	}
@@ -173,7 +174,7 @@ public class UserDao implements Dao<User> {
 		return usersRows.stream().map(UserDao::userBuilder).filter(s -> s.isActive()).collect(Collectors.toList());
 
 	}
-
+	
 	private static List<String[]> fetchRows() throws DaoException {
 		try {
 			List<String> lines = Files.readAllLines(GetFileResource.get(fileName, folderName).toPath());
@@ -187,14 +188,15 @@ public class UserDao implements Dao<User> {
 	public static User userBuilder(String[] userString) {
 
 		UserBuilder userBuilder = UserBuilder.builder();
-
+		//TODO gestire lo uniqueCode
 		userBuilder.firstName(userString[fieldsMap.get(Fields.firstName.name())])
 				.lastName(userString[fieldsMap.get(Fields.lastName.name())])
 				.email(userString[fieldsMap.get(Fields.email.name())])
 				.mobilePhone(userString[fieldsMap.get(Fields.mobilePhone.name())])
 				.active(Boolean.parseBoolean(userString[fieldsMap.get(Fields.isActive.name())]))
 				.newsletter(Boolean.parseBoolean(userString[fieldsMap.get(Fields.isNewsletter.name())]))
-				.privacyConsent(Boolean.parseBoolean(userString[fieldsMap.get(Fields.isNewsletter.name())]));
+				.privacyConsent(Boolean.parseBoolean(userString[fieldsMap.get(Fields.isNewsletter.name())]))
+				.userId(new BigInteger(userString[fieldsMap.get(Fields.userId.name())]));
 
 		return userBuilder.build();
 	}

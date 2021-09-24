@@ -1,6 +1,9 @@
 package it.esedra.corso.shoppinglist.model;
 
+import java.math.BigInteger;
+
 public class UserBuilder {
+	private BigInteger userId;
 	private String firstName;
 	private String lastName;
 	private String email;
@@ -8,6 +11,7 @@ public class UserBuilder {
 	private boolean isActive = false;
 	private boolean privacyConsent = false;
 	private boolean newsletter = false;
+	private String  uniqueCode;
 
 	public UserBuilder(String firstName, String lastName, String email, String mobilePhone, boolean isActive,
 			boolean privacyConsent, boolean newsletter) {
@@ -21,6 +25,20 @@ public class UserBuilder {
 		this.newsletter = newsletter;
 	}
 
+	public UserBuilder(BigInteger userId, String firstName, String lastName, String email, String mobilePhone, boolean isActive,
+			boolean privacyConsent, boolean newsletter, String uniqueCode) {
+		super();
+		this.userId = userId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.mobilePhone = mobilePhone;
+		this.isActive = isActive;
+		this.privacyConsent = privacyConsent;
+		this.newsletter = newsletter;
+		this.uniqueCode = uniqueCode;
+	}
+	
 	public UserBuilder() {
 
 	}
@@ -30,9 +48,20 @@ public class UserBuilder {
 	}
 
 	public User build() {
-		return new User(firstName, lastName, email, mobilePhone, isActive, privacyConsent, newsletter);
+		return new User(userId, firstName, lastName, email, mobilePhone, isActive, privacyConsent, newsletter, uniqueCode);
 	}
 
+	public UserBuilder userId(BigInteger userId) {
+		this.userId = userId;
+		return this;
+	}
+
+	public UserBuilder uniqueCode(String uniqueCode) {
+		this.uniqueCode = uniqueCode;
+		return this;
+	}
+
+	
 	public UserBuilder firstName(String firstName) {
 		this.firstName = firstName;
 		return this;

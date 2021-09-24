@@ -12,7 +12,7 @@ public class Product {
 	private Unit unit;
 
 	public static enum Fields {
-		name, qty, unit
+		id, name, unit
 	}
 
 	public Product() {
@@ -32,6 +32,9 @@ public class Product {
 		this.unit = unit;
 	}
 
+	public BigInteger getid() {
+		return id;
+	}
 	public Unit getUnit() {
 		return unit;
 	}
