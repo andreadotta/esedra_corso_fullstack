@@ -189,8 +189,7 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 	public ShoppingList get(BigInteger id) throws DaoException {
 		Collection<ShoppingList> shoppingLists = ShoppingListDao.rowConverter(this.fetchRows());
 
-		ShoppingList shoppingList = shoppingLists.stream().filter(s -> s.getId().equals(id))
-				.collect(Collectors.toList()).get(0);
+		ShoppingList shoppingList = shoppingLists.stream().filter(s -> s.getId().equals(id)).findFirst().get();
 
 		return shoppingList;
 

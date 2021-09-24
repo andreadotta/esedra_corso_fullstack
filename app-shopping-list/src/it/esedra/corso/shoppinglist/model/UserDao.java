@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -57,16 +56,7 @@ public class UserDao implements Dao<User> {
 
 		List<String[]> usersRows = UserDao.fetchRows();
 
-		UserBuilder userBuilder = new UserBuilder();
-
-		SortedSet<User> users = usersRows.stream()
-				.map(s -> userBuilder.firstName(s[fieldsMap.get(Fields.firstName.name())])
-						.lastName(s[fieldsMap.get(Fields.lastName.name())]).email(s[fieldsMap.get(Fields.email.name())])
-						.mobilePhone(s[fieldsMap.get(Fields.mobilePhone.name())])
-						.active(Boolean.parseBoolean(s[fieldsMap.get(Fields.isActive.name())]))
-						.privacyConsent(Boolean.parseBoolean(s[fieldsMap.get(Fields.isPrivacyConsent.name())]))
-						.newsletter(Boolean.parseBoolean(s[fieldsMap.get(Fields.isNewsletter.name())]))
-						.userId(new BigInteger(s[fieldsMap.get(Fields.userId.name())])).build())
+		SortedSet<User> users = usersRows.stream().map(UserDao::userBuilder)
 				.collect(Collectors.toCollection(TreeSet::new));
 
 		return users;
@@ -122,21 +112,12 @@ public class UserDao implements Dao<User> {
 
 		List<String[]> usersRows = UserDao.fetchRows();
 
-		UserBuilder userBuilder = new UserBuilder();
+		String[] userString = usersRows.stream().filter(s -> s[0].equals(id.toString())).findFirst().get();
 
-		String[] userString = usersRows.stream().filter(s -> s[0].equals(id.toString())).collect(Collectors.toList())
-				.get(0);
-
-		User user = userBuilder.userId(new BigInteger(userString[fieldsMap.get(Fields.userId.name())]))
-				.firstName(userString[fieldsMap.get(Fields.firstName.name())])
-				.lastName(userString[fieldsMap.get(Fields.lastName.name())])
-				.email(userString[fieldsMap.get(Fields.email.name())])
-				.mobilePhone(userString[fieldsMap.get(Fields.mobilePhone.name())])
-				.active(Boolean.parseBoolean(userString[fieldsMap.get(Fields.isActive.name())]))
-				.newsletter(Boolean.parseBoolean(userString[fieldsMap.get(Fields.isNewsletter.name())]))
-				.privacyConsent(Boolean.parseBoolean(userString[fieldsMap.get(Fields.isNewsletter.name())])).build();
+		User user = UserDao.userBuilder(userString);
 
 		return user;
+
 	}
 
 	@Override
@@ -182,32 +163,19 @@ public class UserDao implements Dao<User> {
 	}
 
 	/**
-	 * TODO Utilizzare gli stream
+	 * TODO Implementare if sull'esistenza delle condizioni di aggregazione
 	 */
 	@Override
 	public SortedSet<User> find(User t) throws DaoException {
-		try {
-			List<String> lines = Files.readAllLines(GetFileResource.get(fileName, folderName).toPath());
-			SortedSet<User> users = new TreeSet<User>();
-			for (String line : lines) {
-				String[] fields = line.split(fieldSeparator);
-				if (!fields[fieldsMap.get(Fields.userId.name())].equals("")) {
 
-					users.add(UserBuilder.builder().firstName(fields[fieldsMap.get(Fields.firstName.name())])
-							.lastName(fields[fieldsMap.get(Fields.lastName.name())])
-							.email(fields[fieldsMap.get(Fields.email.name())])
-							.mobilePhone(fields[fieldsMap.get(Fields.mobilePhone.name())])
-							.active(Boolean.parseBoolean(fields[fieldsMap.get(Fields.isActive.name())]))
-							.privacyConsent(Boolean.parseBoolean(fields[fieldsMap.get(Fields.isPrivacyConsent.name())]))
-							.newsletter(Boolean.parseBoolean(fields[fieldsMap.get(Fields.isNewsletter.name())]))
-							.userId(new BigInteger(fields[fieldsMap.get(Fields.userId.name())])).build());
-				}
-			}
-			return users;
-		} catch (IOException e) {
-			logger.error(e.getMessage());
-			throw new DaoException(e.getMessage());
-		}
+		List<String[]> usersRows = UserDao.fetchRows();
+
+		SortedSet<User> users = usersRows.stream().map(UserDao::userBuilder)
+				.filter(s -> s.getEmail().equals(t.getEmail().toString()))
+				.collect(Collectors.toCollection(TreeSet::new));
+
+		return users;
+
 	}
 
 	private static List<String[]> fetchRows() throws DaoException {
@@ -218,6 +186,22 @@ public class UserDao implements Dao<User> {
 		} catch (IOException e) {
 			throw new DaoException(e);
 		}
+	}
+
+	public static User userBuilder(String[] userString) {
+
+		UserBuilder userBuilder = UserBuilder.builder();
+
+		userBuilder.userId(new BigInteger(userString[fieldsMap.get(Fields.userId.name())]))
+				.firstName(userString[fieldsMap.get(Fields.firstName.name())])
+				.lastName(userString[fieldsMap.get(Fields.lastName.name())])
+				.email(userString[fieldsMap.get(Fields.email.name())])
+				.mobilePhone(userString[fieldsMap.get(Fields.mobilePhone.name())])
+				.active(Boolean.parseBoolean(userString[fieldsMap.get(Fields.isActive.name())]))
+				.newsletter(Boolean.parseBoolean(userString[fieldsMap.get(Fields.isNewsletter.name())]))
+				.privacyConsent(Boolean.parseBoolean(userString[fieldsMap.get(Fields.isNewsletter.name())]));
+
+		return userBuilder.build();
 	}
 
 }
