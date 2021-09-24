@@ -112,9 +112,13 @@ public class UserDao implements Dao<User> {
 
 		List<String[]> usersRows = UserDao.fetchRows();
 
-		String[] userString = usersRows.stream().filter(s -> s[0].equals(id.toString())).findFirst().get();
+		User user = null;
 
-		User user = UserDao.userBuilder(userString);
+		if (!id.toString().equals("")) {
+
+			user = UserDao.userBuilder(usersRows.stream().filter(s -> s[0].equals(id.toString())).findFirst().get());
+
+		}
 
 		return user;
 
@@ -162,17 +166,18 @@ public class UserDao implements Dao<User> {
 		}
 	}
 
-	/**
-	 * TODO Implementare if sull'esistenza delle condizioni di aggregazione
-	 */
 	@Override
 	public SortedSet<User> find(User t) throws DaoException {
 
 		List<String[]> usersRows = UserDao.fetchRows();
 
-		SortedSet<User> users = usersRows.stream().map(UserDao::userBuilder)
-				.filter(s -> s.getEmail().equals(t.getEmail().toString()))
-				.collect(Collectors.toCollection(TreeSet::new));
+		SortedSet<User> users = new TreeSet<User>();
+
+		if (!t.getEmail().equals("")) {
+			users = usersRows.stream().map(UserDao::userBuilder)
+					.filter(s -> s.getEmail().equals(t.getEmail().toString()))
+					.collect(Collectors.toCollection(TreeSet::new));
+		}
 
 		return users;
 
