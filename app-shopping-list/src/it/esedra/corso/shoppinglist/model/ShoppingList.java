@@ -11,39 +11,19 @@ import it.esedra.corso.shoppinglist.exceptions.StoreException;
 import it.esedra.corso.shoppinglist.helper.AESHelper;
 import it.esedra.corso.shoppinglist.helper.SequenceManager;
 
-/**
- * 
- * Gli elementi di queso modello sono: Prodotti Nome Identificatio univoco
- * numerico sequenziale Identificatore univoco pubblico alfanumerico (questo
- * identificatore consente di non ricevere scanning o attacchi dall'esterno)
- * Utente
- * 
- */
-
 public class ShoppingList {
 
 	private List<Product> products = new ArrayList<Product>();
-	private String listName = new String();
-	private User user;
-	private BigInteger id = new BigInteger("0");
+	private String listName;
+	private BigInteger userId;
+	private BigInteger id;
 	private String uniqueCode;
 	private final static Logger logger = LoggerFactory.getLogger(ShoppingList.class.getName());
 
-	/**
-	 * TODO creare la relazione tra shoppinglist e user per gestire la creazione
-	 * dell'id della shoppinglist
-	 * 
-	 * @param products
-	 * @param listName
-	 * @param user
-	 * @param id
-	 */
-
-	public ShoppingList(List<Product> products, String listName, User user) {
+	public ShoppingList(String listName, BigInteger userId) {
 		this.id = newShoppingListId();
-		this.products = products;
 		this.listName = listName;
-		this.user = user;
+		this.userId = userId;
 		setUniqueCode();
 
 	}
@@ -52,8 +32,8 @@ public class ShoppingList {
 
 	}
 
-	public User getUser() {
-		return user;
+	public BigInteger getUserId() {
+		return userId;
 	}
 
 	public BigInteger getId() {

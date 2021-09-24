@@ -11,8 +11,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -52,12 +50,12 @@ public class UserDao implements Dao<User> {
 	 * Return a ordered set of Users The method read all lines of csv file....
 	 * return Collection<User> all user
 	 */
+	@Override
 	public Collection<User> getAll() throws DaoException {
 
 		List<String[]> usersRows = UserDao.fetchRows();
 
-		Collection<User> users = usersRows.stream().map(UserDao::userBuilder)
-				.collect(Collectors.toList());
+		Collection<User> users = usersRows.stream().map(UserDao::userBuilder).collect(Collectors.toList());
 
 		return users;
 
@@ -116,7 +114,8 @@ public class UserDao implements Dao<User> {
 
 		if (!id.toString().equals("")) {
 
-			user = UserDao.userBuilder(usersRows.stream().filter(s -> s[0].equals(id.toString())).findFirst().get());
+			user = UserDao.userBuilder(usersRows.stream()
+					.filter(s -> s[fieldsMap.get(Fields.userId.name())].equals(id.toString())).findFirst().get());
 
 		}
 
@@ -167,19 +166,11 @@ public class UserDao implements Dao<User> {
 	}
 
 	@Override
-	public SortedSet<User> find(User t) throws DaoException {
+	public Collection<User> find(User t) throws DaoException {
 
 		List<String[]> usersRows = UserDao.fetchRows();
 
-		SortedSet<User> users = new TreeSet<User>();
-
-		if (!t.getEmail().equals("")) {
-			users = usersRows.stream().map(UserDao::userBuilder)
-					.filter(s -> s.getEmail().equals(t.getEmail().toString()))
-					.collect(Collectors.toCollection(TreeSet::new));
-		}
-
-		return users;
+		return usersRows.stream().map(UserDao::userBuilder).filter(s -> s.isActive()).collect(Collectors.toList());
 
 	}
 
@@ -197,8 +188,7 @@ public class UserDao implements Dao<User> {
 
 		UserBuilder userBuilder = UserBuilder.builder();
 
-		userBuilder.userId(new BigInteger(userString[fieldsMap.get(Fields.userId.name())]))
-				.firstName(userString[fieldsMap.get(Fields.firstName.name())])
+		userBuilder.firstName(userString[fieldsMap.get(Fields.firstName.name())])
 				.lastName(userString[fieldsMap.get(Fields.lastName.name())])
 				.email(userString[fieldsMap.get(Fields.email.name())])
 				.mobilePhone(userString[fieldsMap.get(Fields.mobilePhone.name())])

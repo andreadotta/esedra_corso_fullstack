@@ -17,8 +17,7 @@ import it.esedra.corso.shoppinglist.helper.SequenceManager;
  */
 public class User {
 	private List<ShoppingList> shoppinglists = new ArrayList<ShoppingList>();
-	private static BigInteger id = new BigInteger("0");
-	private BigInteger userId = id;
+	private BigInteger userId;
 	private String firstName;
 	private String lastName;
 	private String email;
@@ -33,8 +32,8 @@ public class User {
 
 	}
 
-	public User(String firstName, String lastName, String email, String mobilePhone,
-			boolean isActive, boolean privacyConsent, boolean newsletter) {
+	public User(String firstName, String lastName, String email, String mobilePhone, boolean isActive,
+			boolean privacyConsent, boolean newsletter) {
 		this.userId = newUserId();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -50,17 +49,21 @@ public class User {
 	 * TODO fare un metodo per creare una shoppinglist collegata all'utente
 	 * 
 	 */
-	public List<ShoppingList> getShoppinglists(){
-		return shoppinglists;
-		
-	}
-	public BigInteger getUserId() {
-		return userId;
+
+	public ShoppingList createShoppingList(String listName) {
+		ShoppingList shoppingList = new ShoppingList(listName, this.userId);
+		shoppinglists.add(shoppingList);
+		return shoppingList;
+
 	}
 
-	public User setUserId(BigInteger userId) {
-		this.userId = userId;
-		return this;
+	public List<ShoppingList> getShoppinglists() {
+		return shoppinglists;
+
+	}
+
+	public BigInteger getUserId() {
+		return userId;
 	}
 
 	public String getFirstName() {
@@ -90,14 +93,14 @@ public class User {
 	public boolean isNewsletter() {
 		return newsletter;
 	}
-	
+
 	public String getUniqueCode() {
 		return uniqueCode;
 	}
-	
+
 	public void setUniqueCode() {
 		try {
-			this.uniqueCode = AESHelper.generateUniqueKey(id,email);
+			this.uniqueCode = AESHelper.generateUniqueKey(userId, email);
 		} catch (StoreException e) {
 			logger.error(e.getMessage());
 		}
@@ -112,7 +115,5 @@ public class User {
 	public BigInteger newUserId() {
 		return userId = SequenceManager.getInstance().getCurrentIdUser();
 	}
-
-
 
 }
