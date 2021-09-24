@@ -45,9 +45,27 @@ public class ShoppingListProductDao implements Dao<ShoppingListProduct> {
 		throw new DaoException("Not implamented yet");
 	}
 
+	/**
+	 * TODO Scegliere tra le due versioni
+	 */
 	@Override
 	public ShoppingListProduct get(BigInteger id) throws DaoException {
-		return null;
+		ShoppingListProductDao shoppingListProductDao = new ShoppingListProductDao();
+
+		return shoppingListProductDao.getAll().stream().filter(s -> s.getProductId().equals(id)).findFirst().get();
+		
+//		List<String[]> shoppingListProductRows = ShoppingListProductDao.fetchRows();
+//
+//		ShoppingListProduct shoppingListProduct = null;
+//
+//		if (!id.toString().equals("")) {
+//
+//			shoppingListProduct = ShoppingListProductDao.builderShoppingListProduct(shoppingListProductRows.stream()
+//					.filter(s -> s[fieldsMap.get(Fields.productId.name())].equals(id.toString())).findFirst().get());
+//
+//		}
+//
+//		return shoppingListProduct;
 	}
 
 	@Override
