@@ -59,8 +59,6 @@ public class ProductDao implements Dao<Product> {
 			StringBuilder builder = new StringBuilder();
 
 			if (true) {
-				builder.append(t.getId());
-				builder.append(fieldSeparator);
 				builder.append(t.getName());
 				builder.append(fieldSeparator);
 				builder.append(t.getQty());

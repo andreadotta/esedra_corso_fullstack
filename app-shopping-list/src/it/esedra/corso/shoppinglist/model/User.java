@@ -51,9 +51,10 @@ public class User {
 	 */
 
 	public ShoppingList createShoppingList(String listName) {
-		ShoppingList shoppingList = new ShoppingList(listName, this.userId);
-		shoppinglists.add(shoppingList);
-		return shoppingList;
+		ShoppingListBuilder builder = new ShoppingListBuilder();
+		builder.listName(listName).userId(this.userId);
+		shoppinglists.add(builder.build());
+		return builder.build();
 
 	}
 

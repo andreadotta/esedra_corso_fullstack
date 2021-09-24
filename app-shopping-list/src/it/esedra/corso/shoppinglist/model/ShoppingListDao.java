@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,7 +20,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import it.esedra.corso.shoppinglist.exceptions.DaoException;
-import it.esedra.corso.shoppinglist.helper.AESHelper;
 import it.esedra.corso.shoppinglist.helper.GetFileResource;
 import it.esedra.corso.shoppinglist.helper.SequenceManager;
 
