@@ -44,15 +44,33 @@ public class ProductDao implements Dao<Product> {
 	public void save(Product t) throws DaoException {
 		throw new DaoException("Not implamented yet");
 	}
-
+	
+	/**
+	 * TODO Scegliere tra le due versioni
+	 */
 	@Override
 	public Product get(BigInteger id) throws DaoException {
-		return null;
+		ProductDao productDao = new ProductDao();
+
+		return productDao.getAll().stream().filter(s -> s.getid().equals(id)).findFirst().get();
+		
+//		List<String[]> productsRows = ProductDao.fetchRows();
+//
+//		Product product = null;
+//
+//		if (!id.toString().equals("")) {
+//
+//			product = ProductDao.builderShoppingList(productsRows.stream()
+//					.filter(s -> s[fieldsMap.get(Fields.id.name())].equals(id.toString())).findFirst().get());
+//
+//		}
+//
+//		return product;
 	}
 
 	@Override
 	public Collection<Product> getAll() throws DaoException {
-		throw new DaoException("Not implamented yet");
+		return ProductDao.rowConverter(ProductDao.fetchRows());
 	}
 
 	@Override
@@ -73,19 +91,19 @@ public class ProductDao implements Dao<Product> {
 	 * @throws DaoException
 	 */
 	public Collection<Product> findByShoppingListId(BigInteger shoppingListId) {
-		/*
-		 * 1. ottengo i prodotti della relazione shoppinglist-products 2. ottengo tutti
-		 * i prodotti 3. restituisco una lista di Product della shoppinglist-products
-		 */
 		Collection<Product> p = null;
 		try {
 			ShoppingListProductDao slpDao = new ShoppingListProductDao();
-			List<Product> products = ProductDao.rowConverter(this.fetchRows()).stream().collect(Collectors.toList());
-			List<ShoppingListProduct> slproducts = slpDao.getAll().stream().collect(Collectors.toList());
+			List<Product> products = ProductDao.rowConverter(ProductDao.fetchRows()).stream().collect(Collectors.toList());
 
-			slproducts.stream().filter(slproduct -> slproduct.getShoppingListId().equals(shoppingListId));
+			List<ShoppingListProduct> slproducts = slpDao.getAll().stream()
+					.filter(slproduct -> slproduct.getShoppingListId().equals(shoppingListId))
+					.collect(Collectors.toList());
 
-			p = products.stream().distinct().filter(slproducts::contains).collect(Collectors.toList());
+			p = products.stream().distinct()
+					.filter(product -> slproducts.stream()
+							.anyMatch(slproduct -> product.getid().equals(slproduct.getProductId())))
+					.collect(Collectors.toList());
 		} catch (DaoException e) {
 			e.printStackTrace();
 		}
@@ -96,7 +114,7 @@ public class ProductDao implements Dao<Product> {
 		return csvRows.stream().map(ProductDao::builderShoppingList).collect(Collectors.toList());
 	}
 
-	private List<String[]> fetchRows() throws DaoException {
+	private static List<String[]> fetchRows() throws DaoException {
 		try {
 			List<String> lines = Files.readAllLines(GetFileResource.get(fileName, folderName).toPath());
 
@@ -116,7 +134,6 @@ public class ProductDao implements Dao<Product> {
 
 		ProductBuilder builder = ProductBuilder.builder();
 
-		// builder.listName(product[fieldsMap.get(Fields.listName.name())]);
 		builder.id(new BigInteger(product[fieldsMap.get(Fields.id.name())]));
 		builder.name(product[fieldsMap.get(Fields.name.name())]);
 		builder.unit(Unit.valueOf(product[fieldsMap.get(Fields.unit.name())]));

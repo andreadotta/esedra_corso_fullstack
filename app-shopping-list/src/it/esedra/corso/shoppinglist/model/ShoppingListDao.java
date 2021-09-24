@@ -11,9 +11,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -31,7 +28,7 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 	private final static Logger logger = LoggerFactory.getLogger(ShoppingListDao.class.getName());
 
 	public static enum Fields {
-		userId, listName, id, uniqueCode
+		id, listName, uniqueCode, userId
 	}
 
 	private final static Map<String, Integer> fieldsMap;
@@ -50,7 +47,7 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 		File dbclone = null;
 		try {
 			// cerco tutti i shopping list
-			SortedSet<ShoppingList> shoppingLists = this.find(new ShoppingListBuilder().build());
+			Collection<ShoppingList> shoppingLists = this.getAll();
 			// rinominiamo il file
 			// prendo il file del db
 			db = new File(GetFileResource.get(fileName, folderName).toPath().toString());
@@ -84,32 +81,13 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 	}
 
 	@Override
-	public SortedSet<ShoppingList> find(ShoppingList shoppingList) throws DaoException {
-		try {
-			List<String> lines = Files.readAllLines(GetFileResource.get(fileName, folderName).toPath());
-			SortedSet<ShoppingList> shoppingLists = new TreeSet<ShoppingList>();
-			ShoppingListBuilder builder = null;
-			for (String line : lines) {
-				String[] fields = line.split(fieldSeparator);
-				if (fields[fieldsMap.get(Fields.id.name())].equals(shoppingList.getId().toString())
-						|| fields[fieldsMap.get(Fields.listName.name())].equals(shoppingList.getListName())) {
-					if (builder == null) {
-						builder = ShoppingListBuilder.builder();
-						builder.listName(fields[fieldsMap.get(Fields.listName.name())]);
-					}
-					Product tmpProduct = new Product();
-//					tmpProduct.setName(fields[fieldsMap.get("name")]);
-//					tmpProduct.setQty(Integer.parseInt(fields[fieldsMap.get("qty")]));
-//					tmpProduct.setUnit(Unit.valueOf(fields[fieldsMap.get("unit")]));
-					// builder.addProduct(tmpProduct);
-				}
-				shoppingLists.add((ShoppingList) builder.build());
-			}
-			return shoppingLists;
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new DaoException(e.getMessage());
-		}
+	public Collection<ShoppingList> find(ShoppingList shoppingList) throws DaoException {
+
+		List<String[]> shoppingListRows = ShoppingListDao.fetchRows();
+
+		return shoppingListRows.stream().map(ShoppingListDao::builderShoppingList)
+				.filter(s -> s.getListName().equals(shoppingList.getListName())).collect(Collectors.toList());
+
 	}
 
 	/**
@@ -153,31 +131,35 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 	}
 
 	/**
-	 * TODO: Rivedere il ritorno di un'istanza di ShoppingList al post di una
-	 * Collection
+	 * TODO Scegliere tra le due versioni
 	 */
-
 	@Override
 	public ShoppingList get(BigInteger id) throws DaoException {
-		Collection<ShoppingList> shoppingLists = ShoppingListDao.rowConverter(this.fetchRows());
+		ShoppingListDao shoppingListDao = new ShoppingListDao();
 
-		return shoppingLists.stream().filter(s -> s.getId().equals(id)).findFirst().get();
+		return shoppingListDao.getAll().stream().filter(s -> s.getId().equals(id)).findFirst().get();
+		
+//		List<String[]> shoppingListRows = ShoppingListDao.fetchRows();
+//
+//		ShoppingList shoppingList = null;
+//
+//		if (!id.toString().equals("")) {
+//
+//			shoppingList = ShoppingListDao.builderShoppingList(shoppingListRows.stream()
+//					.filter(s -> s[fieldsMap.get(Fields.id.name())].equals(id.toString())).findFirst().get());
+//
+//		}
+//
+//		return user;
 
 	}
 
 	@Override
 	public Collection<ShoppingList> getAll() throws DaoException {
-		ProductDao pdao = new ProductDao();
-
-		return ShoppingListDao.rowConverter(this.fetchRows()).stream().map(shoppingList -> {
-			ShoppingListBuilder builder = new ShoppingListBuilder();
-			return builder.listName(shoppingList.getListName()).id(shoppingList.getId())
-					.products(pdao.findByShoppingListId(shoppingList.getId())).uniqueCode(shoppingList.getUniqueCode())
-					.user(shoppingList.getUser()).build();
-		}).collect(Collectors.toList());
+		return ShoppingListDao.rowConverter(ShoppingListDao.fetchRows());
 	}
 
-	private List<String[]> fetchRows() throws DaoException {
+	private static List<String[]> fetchRows() throws DaoException {
 		try {
 			List<String> lines = Files.readAllLines(GetFileResource.get(fileName, folderName).toPath());
 
@@ -209,6 +191,8 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 		ProductDao productDao = new ProductDao();
 		try {
 			builder.user(userDao.get(new BigInteger(shoppingList[fieldsMap.get(Fields.userId.name())])));
+			builder.products(
+					productDao.findByShoppingListId(new BigInteger(shoppingList[fieldsMap.get(Fields.id.name())])));
 		} catch (DaoException e) {
 			ShoppingListDao.logger.error(e.getMessage());
 		}

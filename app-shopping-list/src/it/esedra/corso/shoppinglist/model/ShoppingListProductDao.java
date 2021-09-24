@@ -37,7 +37,6 @@ public class ShoppingListProductDao implements Dao<ShoppingListProduct> {
 		shoppingListId, qty, productId
 	}
 
-
 	/**
 	 * TODO Implementare condizione riga 43
 	 */
@@ -53,7 +52,7 @@ public class ShoppingListProductDao implements Dao<ShoppingListProduct> {
 
 	@Override
 	public Collection<ShoppingListProduct> getAll() throws DaoException {
-		return ShoppingListProductDao.rowConverter(this.fetchRows());
+		return ShoppingListProductDao.rowConverter(ShoppingListProductDao.fetchRows());
 	}
 
 	@Override
@@ -66,12 +65,11 @@ public class ShoppingListProductDao implements Dao<ShoppingListProduct> {
 		return null;
 	}
 
-	
 	public static Collection<ShoppingListProduct> rowConverter(List<String[]> csvRows) throws DaoException {
-		return csvRows.stream().map(ShoppingListProductDao::builderShoppingList).collect(Collectors.toList());
+		return csvRows.stream().map(ShoppingListProductDao::builderShoppingListProduct).collect(Collectors.toList());
 	}
-	
-	private List<String[]> fetchRows() throws DaoException {
+
+	private static List<String[]> fetchRows() throws DaoException {
 		try {
 			List<String> lines = Files.readAllLines(GetFileResource.get(fileName, folderName).toPath());
 
@@ -87,14 +85,14 @@ public class ShoppingListProductDao implements Dao<ShoppingListProduct> {
 	 * @param shoppingList
 	 * @return
 	 */
-	public static ShoppingListProduct builderShoppingList(String[] product) {
+	public static ShoppingListProduct builderShoppingListProduct(String[] product) {
 
 		ShoppingListProductBuilder builder = ShoppingListProductBuilder.builder();
 
 		builder.shoppingListId(new BigInteger(product[fieldsMap.get(Fields.shoppingListId.name())]));
 		builder.productId(new BigInteger(product[fieldsMap.get(Fields.productId.name())]));
 		builder.qty(Integer.parseInt(product[fieldsMap.get(Fields.qty.name())]));
-		
+
 		return builder.build();
 	}
 

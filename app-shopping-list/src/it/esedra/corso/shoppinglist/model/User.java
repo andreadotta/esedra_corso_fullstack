@@ -11,10 +11,6 @@ import it.esedra.corso.shoppinglist.exceptions.StoreException;
 import it.esedra.corso.shoppinglist.helper.AESHelper;
 import it.esedra.corso.shoppinglist.helper.SequenceManager;
 
-/**
- * @author monica
- *
- */
 public class User {
 	private List<ShoppingList> shoppinglists = new ArrayList<ShoppingList>();
 	private BigInteger userId;
@@ -32,20 +28,8 @@ public class User {
 
 	}
 
-	public User(String firstName, String lastName, String email, String mobilePhone, boolean isActive,
-			boolean privacyConsent, boolean newsletter) {
-		this.userId = newUserId();
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.mobilePhone = mobilePhone;
-		this.isActive = isActive;
-		this.privacyConsent = privacyConsent;
-		this.newsletter = newsletter;
-		setUniqueCode();
-	}
-	public User(BigInteger userId, String firstName, String lastName, String email, String mobilePhone, boolean isActive,
-			boolean privacyConsent, boolean newsletter, String uniqueCode) {
+	public User(BigInteger userId, String firstName, String lastName, String email, String mobilePhone,
+			boolean isActive, boolean privacyConsent, boolean newsletter, String uniqueCode) {
 		this.userId = userId;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -56,6 +40,7 @@ public class User {
 		this.newsletter = newsletter;
 		this.uniqueCode = uniqueCode;
 	}
+
 	public List<ShoppingList> getShoppinglists() {
 		return shoppinglists;
 

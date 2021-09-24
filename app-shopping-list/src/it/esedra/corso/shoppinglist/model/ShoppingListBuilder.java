@@ -6,10 +6,10 @@ import java.util.Collection;
 public class ShoppingListBuilder {
 
 	private Collection<Product> products;
-	private String listName;
-	private User user;
 	private BigInteger id;
+	private String listName;
 	private String uniqueCode;
+	private User user;
 
 	public ShoppingListBuilder(String listName) {
 		this.listName = listName;
@@ -31,12 +31,12 @@ public class ShoppingListBuilder {
 		this.id = id;
 		return this;
 	}
-	
+
 	public ShoppingListBuilder uniqueCode(String uniqueCode) {
 		this.uniqueCode = uniqueCode;
 		return this;
 	}
-	
+
 	public ShoppingListBuilder listName(String listName) {
 		this.listName = listName;
 		return this;
@@ -46,6 +46,7 @@ public class ShoppingListBuilder {
 		this.user = user;
 		return this;
 	}
+
 	public ShoppingListBuilder products(Collection<Product> products) {
 		this.products = products;
 		return this;

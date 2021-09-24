@@ -2,10 +2,6 @@ package it.esedra.corso.shoppinglist.model;
 
 import java.math.BigInteger;
 
-/**
- * Gli elementi di queso modello sono: Descrizione Quantità Prezzo Unità
- */
-
 public class Product {
 	private BigInteger id;
 	private String name;

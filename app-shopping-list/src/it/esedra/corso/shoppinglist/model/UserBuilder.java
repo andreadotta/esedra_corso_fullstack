@@ -11,22 +11,10 @@ public class UserBuilder {
 	private boolean isActive = false;
 	private boolean privacyConsent = false;
 	private boolean newsletter = false;
-	private String  uniqueCode;
+	private String uniqueCode;
 
-	public UserBuilder(String firstName, String lastName, String email, String mobilePhone, boolean isActive,
-			boolean privacyConsent, boolean newsletter) {
-		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.mobilePhone = mobilePhone;
-		this.isActive = isActive;
-		this.privacyConsent = privacyConsent;
-		this.newsletter = newsletter;
-	}
-
-	public UserBuilder(BigInteger userId, String firstName, String lastName, String email, String mobilePhone, boolean isActive,
-			boolean privacyConsent, boolean newsletter, String uniqueCode) {
+	public UserBuilder(BigInteger userId, String firstName, String lastName, String email, String mobilePhone,
+			boolean isActive, boolean privacyConsent, boolean newsletter, String uniqueCode) {
 		super();
 		this.userId = userId;
 		this.firstName = firstName;
@@ -38,7 +26,7 @@ public class UserBuilder {
 		this.newsletter = newsletter;
 		this.uniqueCode = uniqueCode;
 	}
-	
+
 	public UserBuilder() {
 
 	}
@@ -48,7 +36,8 @@ public class UserBuilder {
 	}
 
 	public User build() {
-		return new User(userId, firstName, lastName, email, mobilePhone, isActive, privacyConsent, newsletter, uniqueCode);
+		return new User(userId, firstName, lastName, email, mobilePhone, isActive, privacyConsent, newsletter,
+				uniqueCode);
 	}
 
 	public UserBuilder userId(BigInteger userId) {
@@ -61,7 +50,6 @@ public class UserBuilder {
 		return this;
 	}
 
-	
 	public UserBuilder firstName(String firstName) {
 		this.firstName = firstName;
 		return this;

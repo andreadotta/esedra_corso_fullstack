@@ -3,7 +3,6 @@ package it.esedra.corso.shoppinglist.model;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +14,8 @@ import it.esedra.corso.shoppinglist.helper.SequenceManager;
 public class ShoppingList {
 
 	private Collection<Product> products = new ArrayList<Product>();
-	private String listName;
 	private BigInteger id;
+	private String listName;
 	private String uniqueCode;
 	private User user;
 
