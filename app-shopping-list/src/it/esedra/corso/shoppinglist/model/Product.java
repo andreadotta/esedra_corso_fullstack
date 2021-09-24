@@ -4,14 +4,11 @@ import java.math.BigInteger;
 
 /**
  * Gli elementi di queso modello sono: Descrizione Quantità Prezzo Unità
- * Identificativo univoco numerico sequenziale TODO: valutare se rinominare in
- * "Product" TODO: valutare l'utlizzo di un'enum al posto di "unit" TODO:
- * Implementare identificatore numerico BigInteger,
  */
 
 public class Product {
+	private BigInteger id;
 	private String name;
-	private Integer qty;
 	private Unit unit;
 
 	public static enum Fields {
@@ -29,14 +26,10 @@ public class Product {
 	 * @param qty
 	 * @param unit
 	 */
-	public Product(String name, Integer qty, Unit unit) {
+	public Product(BigInteger id, String name, Unit unit) {
 		this.name = name;
-		this.qty = qty;
+		this.id = id;
 		this.unit = unit;
-	}
-
-	public Integer getQty() {
-		return qty;
 	}
 
 	public Unit getUnit() {

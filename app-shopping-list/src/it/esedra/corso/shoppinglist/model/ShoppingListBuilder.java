@@ -1,11 +1,9 @@
 package it.esedra.corso.shoppinglist.model;
 
-import java.math.BigInteger;
-
 public class ShoppingListBuilder {
 
 	private String listName;
-	private BigInteger userId;
+	private User user;
 
 	public ShoppingListBuilder(String listName) {
 		this.listName = listName;
@@ -20,7 +18,8 @@ public class ShoppingListBuilder {
 	}
 
 	public ShoppingList build() {
-		return new ShoppingList(listName, userId);
+		
+		return new ShoppingList(listName, user);
 	}
 
 	public ShoppingListBuilder listName(String listName) {
@@ -28,8 +27,8 @@ public class ShoppingListBuilder {
 		return this;
 	}
 
-	public ShoppingListBuilder userId(BigInteger userId) {
-		this.userId = userId;
+	public ShoppingListBuilder user(User user) {
+		this.user = user;
 		return this;
 	}
 

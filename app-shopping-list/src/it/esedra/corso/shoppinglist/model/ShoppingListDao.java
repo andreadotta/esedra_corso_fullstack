@@ -37,10 +37,10 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 	private final static Map<String, Integer> fieldsMap;
 	static {
 		HashMap<String, Integer> tmpMap = new HashMap<String, Integer>();
-		tmpMap.put(Fields.userId.name(), 0);
-		tmpMap.put(Fields.id.name(), 1);
-		tmpMap.put(Fields.listName.name(), 2);
-		tmpMap.put(Fields.uniqueCode.name(), 3);
+		tmpMap.put(Fields.id.name(), 0);
+		tmpMap.put(Fields.listName.name(), 1);
+		tmpMap.put(Fields.uniqueCode.name(), 2);
+		tmpMap.put(Fields.userId.name(), 3);
 		fieldsMap = Collections.unmodifiableMap(tmpMap);
 	}
 
@@ -168,7 +168,6 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 	@Override
 	public Collection<ShoppingList> getAll() throws DaoException {
 		return ShoppingListDao.rowConverter(this.fetchRows());
-
 	}
 
 	private List<String[]> fetchRows() throws DaoException {

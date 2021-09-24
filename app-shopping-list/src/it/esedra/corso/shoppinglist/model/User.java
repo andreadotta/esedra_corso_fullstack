@@ -45,19 +45,6 @@ public class User {
 		setUniqueCode();
 	}
 
-	/**
-	 * TODO fare un metodo per creare una shoppinglist collegata all'utente
-	 * 
-	 */
-
-	public ShoppingList createShoppingList(String listName) {
-		ShoppingListBuilder builder = new ShoppingListBuilder();
-		builder.listName(listName).userId(this.userId);
-		shoppinglists.add(builder.build());
-		return builder.build();
-
-	}
-
 	public List<ShoppingList> getShoppinglists() {
 		return shoppinglists;
 

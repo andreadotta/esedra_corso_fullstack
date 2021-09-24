@@ -5,18 +5,17 @@ import java.math.BigInteger;
 public class ProductBuilder {
 
 	private String name;
-	private Integer qty;
 	private Unit unit;
-	private static BigInteger id = new BigInteger("1");
+	private BigInteger id = null;
 
 	public ProductBuilder() {
 		super();
 	}
 
-	public ProductBuilder(String name, Integer qty, Unit unit) {
+	public ProductBuilder(BigInteger id, String name, Unit unit) {
 		super();
+		this.id = id;
 		this.name = name;
-		this.qty = qty;
 		this.unit = unit;
 	}
 
@@ -26,11 +25,6 @@ public class ProductBuilder {
 
 	public ProductBuilder setName(String name) {
 		this.name = name;
-		return this;
-	}
-
-	public ProductBuilder setQty(Integer qty) {
-		this.qty = qty;
 		return this;
 	}
 
@@ -45,7 +39,7 @@ public class ProductBuilder {
 	}
 
 	public Product build() {
-		return new Product(name, qty, unit);
+		return new Product(id, name, unit);
 	}
 
 }

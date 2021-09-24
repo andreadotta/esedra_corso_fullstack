@@ -15,25 +15,26 @@ public class ShoppingList {
 
 	private List<Product> products = new ArrayList<Product>();
 	private String listName;
-	private BigInteger userId;
 	private BigInteger id;
 	private String uniqueCode;
+	private User user;
+
 	private final static Logger logger = LoggerFactory.getLogger(ShoppingList.class.getName());
 
-	public ShoppingList(String listName, BigInteger userId) {
+	public ShoppingList(String listName, User user) {
 		this.id = newShoppingListId();
 		this.listName = listName;
-		this.userId = userId;
+		this.user = user;
 		setUniqueCode();
 
 	}
 
-	private ShoppingList() {
-
+	public User getUser() {
+		return user;
 	}
 
-	public BigInteger getUserId() {
-		return userId;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public BigInteger getId() {

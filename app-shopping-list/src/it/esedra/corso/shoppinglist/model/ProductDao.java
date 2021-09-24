@@ -24,27 +24,22 @@ import it.esedra.corso.shoppinglist.model.ShoppingListDao.Fields;
 
 public class ProductDao implements Dao<Product> {
 
-	private String name;
-	private Integer qty;
-	private Unit unit;
-	private static BigInteger id = new BigInteger("1");
-	private static final String fileName = "lista.csv";
+	private static final String fileName = "products.csv";
 	private static final String folderName = "shoppinglist";
 	private static final String fieldSeparator = ",";
-	private final static Logger logger = LoggerFactory.getLogger(ShoppingListDao.class.getName());
+	private final static Logger logger = LoggerFactory.getLogger(ProductDao.class.getName());
 
 	private final static Map<String, Integer> fieldsMap;
 	static {
 		HashMap<String, Integer> tmpMap = new HashMap<String, Integer>();
-		tmpMap.put(Fields.name.name(), 0);
+		tmpMap.put(Fields.id.name(), 0);
 		tmpMap.put(Fields.name.name(), 1);
-		tmpMap.put(Fields.qty.name(), 2);
-		tmpMap.put(Fields.unit.name(), 3);
+		tmpMap.put(Fields.unit.name(), 2);
 		fieldsMap = Collections.unmodifiableMap(tmpMap);
 	}
 
 	public static enum Fields {
-		id, name, qty, unit
+		id, name, unit
 	}
 
 	/**
@@ -52,32 +47,7 @@ public class ProductDao implements Dao<Product> {
 	 */
 	@Override
 	public void save(Product t) throws DaoException {
-		try {
-
-			BufferedWriter writer = new BufferedWriter(
-					new FileWriter(GetFileResource.get(fileName, folderName).toPath().toString(), true));
-			StringBuilder builder = new StringBuilder();
-
-			if (true) {
-				builder.append(t.getName());
-				builder.append(fieldSeparator);
-				builder.append(t.getQty());
-				builder.append(fieldSeparator);
-				builder.append(t.getUnit());
-				builder.append(fieldSeparator);
-				builder.append(System.getProperty("line.separator"));
-				writer.write(builder.toString());
-				writer.flush();
-				writer.close();
-				logger.info("Prodotto " + t.getName() + " aggiunto");
-
-			} else {
-				logger.warn("no product stored or updated!");
-			}
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			throw new DaoException(e.getMessage());
-		}
+		throw new DaoException("Not implamented yet");
 	}
 
 	@Override
@@ -87,8 +57,7 @@ public class ProductDao implements Dao<Product> {
 
 	@Override
 	public Collection<Product> getAll() throws DaoException {
-		Collection<Product> products = ProductDao.rowConverter(this.fetchRows());
-		return products;
+		throw new DaoException("Not implamented yet");
 	}
 
 	@Override
@@ -102,21 +71,15 @@ public class ProductDao implements Dao<Product> {
 	}
 
 	private List<String[]> fetchRows() throws DaoException {
-		try {
-			List<String> lines = Files.readAllLines(GetFileResource.get(fileName, folderName).toPath());
-
-			return lines.stream().map(s -> s.split(fieldSeparator)).collect(Collectors.toList());
-		} catch (IOException e) {
-			throw new DaoException(e);
-		}
+		throw new DaoException("Not implamented yet");
 	}
 
 	/**
 	 * TODO rowConverter
+	 * @throws DaoException 
 	 */
-	public static Collection<Product> rowConverter(List<String[]> csvRows) {
-		return null;
-
+	public static Collection<Product> rowConverter(List<String[]> csvRows) throws DaoException {
+		throw new DaoException("Not implamented yet");
 	}
 
 }
