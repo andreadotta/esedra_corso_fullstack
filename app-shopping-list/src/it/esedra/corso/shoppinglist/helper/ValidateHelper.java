@@ -12,7 +12,7 @@ import javax.json.JsonReader;
 import org.apache.commons.lang3.EnumUtils;
 
 import it.esedra.corso.shoppinglist.exceptions.ValidateException;
-import it.esedra.corso.shoppinglist.model.ShoppingList;
+import it.esedra.corso.shoppinglist.model.ShoppingListDao;
 import it.esedra.corso.shoppinglist.model.Unit;
 
 public class ValidateHelper {
@@ -21,7 +21,7 @@ public class ValidateHelper {
 		JsonReader reader = Json.createReader(new StringReader(params));
 		JsonObject listaSpesaObject = reader.readObject();
 		try {
-			Integer.parseInt(listaSpesaObject.get(ShoppingList.Fields.id.name()).toString());
+			Integer.parseInt(listaSpesaObject.get(ShoppingListDao.Fields.id.name()).toString());
 		} catch (NumberFormatException e) {
 			throw new ValidateException("L'id inserito non � un intero");
 		}
@@ -47,7 +47,7 @@ public class ValidateHelper {
 		}
 
 		if (ValidateHelper.validateListName(listaSpesaObject
-				.get(ShoppingList.Fields.listName.name()).toString().replaceAll("^.|.$", "").replace(" ", ""))) {
+				.get(ShoppingListDao.Fields.listName.name()).toString().replaceAll("^.|.$", "").replace(" ", ""))) {
 			throw new ValidateException("Non � un nome valido per una lista");
 		}
 
