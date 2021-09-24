@@ -52,12 +52,12 @@ public class UserDao implements Dao<User> {
 	 * Return a ordered set of Users The method read all lines of csv file....
 	 * return Collection<User> all user
 	 */
-	public SortedSet<User> getAll() throws DaoException {
+	public Collection<User> getAll() throws DaoException {
 
 		List<String[]> usersRows = UserDao.fetchRows();
 
-		SortedSet<User> users = usersRows.stream().map(UserDao::userBuilder)
-				.collect(Collectors.toCollection(TreeSet::new));
+		Collection<User> users = usersRows.stream().map(UserDao::userBuilder)
+				.collect(Collectors.toList());
 
 		return users;
 
