@@ -37,45 +37,20 @@ public class ProductDao implements Dao<Product> {
 		id, name, unit
 	}
 
-	/**
-	 * TODO Implementare condizione riga 43
-	 */
 	@Override
-	public void save(Product t) throws DaoException {
-		throw new DaoException("Not implamented yet");
+	public Collection<Product> getAll() throws DaoException {
+		return ProductDao.rowConverter(ProductDao.fetchRows());
 	}
-	
+
 	/**
 	 * TODO Scegliere tra le due versioni
 	 */
 	@Override
 	public Product get(BigInteger id) throws DaoException {
 		ProductDao productDao = new ProductDao();
-
+	
 		return productDao.getAll().stream().filter(s -> s.getid().equals(id)).findFirst().get();
-		
-//		List<String[]> productsRows = ProductDao.fetchRows();
-//
-//		Product product = null;
-//
-//		if (!id.toString().equals("")) {
-//
-//			product = ProductDao.builderShoppingList(productsRows.stream()
-//					.filter(s -> s[fieldsMap.get(Fields.id.name())].equals(id.toString())).findFirst().get());
-//
-//		}
-//
-//		return product;
-	}
-
-	@Override
-	public Collection<Product> getAll() throws DaoException {
-		return ProductDao.rowConverter(ProductDao.fetchRows());
-	}
-
-	@Override
-	public void delete(BigInteger id) throws DaoException {
-
+	
 	}
 
 	@Override
@@ -94,12 +69,13 @@ public class ProductDao implements Dao<Product> {
 		Collection<Product> p = null;
 		try {
 			ShoppingListProductDao slpDao = new ShoppingListProductDao();
-			List<Product> products = ProductDao.rowConverter(ProductDao.fetchRows()).stream().collect(Collectors.toList());
-
+			ProductDao productDao = new ProductDao();
+			List<Product> products = productDao.getAll().stream().collect(Collectors.toList());
+	
 			List<ShoppingListProduct> slproducts = slpDao.getAll().stream()
 					.filter(slproduct -> slproduct.getShoppingListId().equals(shoppingListId))
 					.collect(Collectors.toList());
-
+	
 			p = products.stream().distinct()
 					.filter(product -> slproducts.stream()
 							.anyMatch(slproduct -> product.getid().equals(slproduct.getProductId())))
@@ -110,18 +86,31 @@ public class ProductDao implements Dao<Product> {
 		return p;
 	}
 
-	public static Collection<Product> rowConverter(List<String[]> csvRows) throws DaoException {
-		return csvRows.stream().map(ProductDao::builderShoppingList).collect(Collectors.toList());
+	/**
+	 * TODO Implementare condizione riga 43
+	 */
+	@Override
+	public void save(Product t) throws DaoException {
+		throw new DaoException("Not implamented yet");
+	}
+
+	@Override
+	public void delete(BigInteger id) throws DaoException {
+
 	}
 
 	private static List<String[]> fetchRows() throws DaoException {
 		try {
 			List<String> lines = Files.readAllLines(GetFileResource.get(fileName, folderName).toPath());
-
+	
 			return lines.stream().map(s -> s.split(fieldSeparator)).collect(Collectors.toList());
 		} catch (IOException e) {
 			throw new DaoException(e);
 		}
+	}
+
+	public static Collection<Product> rowConverter(List<String[]> csvRows) throws DaoException {
+		return csvRows.stream().map(ProductDao::builderShoppingList).collect(Collectors.toList());
 	}
 
 	/**

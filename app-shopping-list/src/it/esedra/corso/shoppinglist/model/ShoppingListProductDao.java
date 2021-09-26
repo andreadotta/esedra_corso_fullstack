@@ -37,12 +37,9 @@ public class ShoppingListProductDao implements Dao<ShoppingListProduct> {
 		shoppingListId, qty, productId
 	}
 
-	/**
-	 * TODO Implementare condizione riga 43
-	 */
 	@Override
-	public void save(ShoppingListProduct t) throws DaoException {
-		throw new DaoException("Not implamented yet");
+	public Collection<ShoppingListProduct> getAll() throws DaoException {
+		return ShoppingListProductDao.rowConverter(ShoppingListProductDao.fetchRows());
 	}
 
 	/**
@@ -51,31 +48,9 @@ public class ShoppingListProductDao implements Dao<ShoppingListProduct> {
 	@Override
 	public ShoppingListProduct get(BigInteger id) throws DaoException {
 		ShoppingListProductDao shoppingListProductDao = new ShoppingListProductDao();
-
+	
 		return shoppingListProductDao.getAll().stream().filter(s -> s.getProductId().equals(id)).findFirst().get();
-		
-//		List<String[]> shoppingListProductRows = ShoppingListProductDao.fetchRows();
-//
-//		ShoppingListProduct shoppingListProduct = null;
-//
-//		if (!id.toString().equals("")) {
-//
-//			shoppingListProduct = ShoppingListProductDao.builderShoppingListProduct(shoppingListProductRows.stream()
-//					.filter(s -> s[fieldsMap.get(Fields.productId.name())].equals(id.toString())).findFirst().get());
-//
-//		}
-//
-//		return shoppingListProduct;
-	}
-
-	@Override
-	public Collection<ShoppingListProduct> getAll() throws DaoException {
-		return ShoppingListProductDao.rowConverter(ShoppingListProductDao.fetchRows());
-	}
-
-	@Override
-	public void delete(BigInteger id) throws DaoException {
-
+	
 	}
 
 	@Override
@@ -83,18 +58,31 @@ public class ShoppingListProductDao implements Dao<ShoppingListProduct> {
 		return null;
 	}
 
-	public static Collection<ShoppingListProduct> rowConverter(List<String[]> csvRows) throws DaoException {
-		return csvRows.stream().map(ShoppingListProductDao::builderShoppingListProduct).collect(Collectors.toList());
+	/**
+	 * TODO Implementare condizione riga 43
+	 */
+	@Override
+	public void save(ShoppingListProduct t) throws DaoException {
+		throw new DaoException("Not implamented yet");
+	}
+
+	@Override
+	public void delete(BigInteger id) throws DaoException {
+
 	}
 
 	private static List<String[]> fetchRows() throws DaoException {
 		try {
 			List<String> lines = Files.readAllLines(GetFileResource.get(fileName, folderName).toPath());
-
+	
 			return lines.stream().map(s -> s.split(fieldSeparator)).collect(Collectors.toList());
 		} catch (IOException e) {
 			throw new DaoException(e);
 		}
+	}
+
+	public static Collection<ShoppingListProduct> rowConverter(List<String[]> csvRows) throws DaoException {
+		return csvRows.stream().map(ShoppingListProductDao::builderShoppingListProduct).collect(Collectors.toList());
 	}
 
 	/**

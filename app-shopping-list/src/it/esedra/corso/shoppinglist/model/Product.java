@@ -22,6 +22,7 @@ public class Product {
 	 * @param qty
 	 * @param unit
 	 */
+
 	public Product(BigInteger id, String name, Unit unit) {
 		this.name = name;
 		this.id = id;
@@ -31,6 +32,7 @@ public class Product {
 	public BigInteger getid() {
 		return id;
 	}
+
 	public Unit getUnit() {
 		return unit;
 	}

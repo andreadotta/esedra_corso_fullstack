@@ -42,6 +42,72 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 	}
 
 	@Override
+	public Collection<ShoppingList> getAll() throws DaoException {
+		return ShoppingListDao.rowConverter(ShoppingListDao.fetchRows());
+	}
+
+	/**
+	 * TODO Scegliere tra le due versioni
+	 */
+	@Override
+	public ShoppingList get(BigInteger id) throws DaoException {
+		ShoppingListDao shoppingListDao = new ShoppingListDao();
+	
+		return shoppingListDao.getAll().stream().filter(s -> s.getId().equals(id)).findFirst().get();
+	
+	}
+
+	@Override
+	public Collection<ShoppingList> find(ShoppingList shoppingList) throws DaoException {
+	
+		List<String[]> shoppingListRows = ShoppingListDao.fetchRows();
+	
+		return shoppingListRows.stream().map(ShoppingListDao::builderShoppingList)
+				.filter(s -> s.getListName().equals(shoppingList.getListName())).collect(Collectors.toList());
+	
+	}
+
+	/**
+		 * TODO Implementare la parte Update
+		 */
+	
+		@Override
+		public void save(ShoppingList t) throws DaoException {
+			try {
+	
+				BufferedWriter writer = new BufferedWriter(
+						new FileWriter(GetFileResource.get(fileName, folderName).toPath().toString(), true));
+				StringBuilder builder = new StringBuilder();
+	
+	//			if (t.getUniqueCode() == null) {
+	//				t.getUniqueCode = ShoppingList.generateUniqueKey(this.getId(), this.getListName());
+	//			}
+	
+				if ((t.getId().equals(BigInteger.ONE)
+						|| t.getId().compareTo(SequenceManager.getInstance().getCurrentIdShoppingList()) > 0)
+						&& !find(t).contains(t)) {
+					builder.append(t.getId());
+					builder.append(fieldSeparator);
+					builder.append(t.getListName());
+					builder.append(fieldSeparator);
+					builder.append(t.getUniqueCode());
+					builder.append(fieldSeparator);
+					builder.append(System.getProperty("line.separator"));
+					writer.write(builder.toString());
+					writer.flush();
+					writer.close();
+					logger.info("ShoppingList " + t.getListName() + " salvata");
+	
+				} else {
+					logger.warn("no shoppingList stored or updated!");
+				}
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+				throw new DaoException(e.getMessage());
+			}
+		}
+
+	@Override
 	public void delete(BigInteger id) throws DaoException {
 		File db = null;
 		File dbclone = null;
@@ -78,85 +144,6 @@ public class ShoppingListDao implements Dao<ShoppingList> {
 			// eliminio il clone che avevo fatto per salvare i dati in caso di errore
 			dbclone.delete();
 		}
-	}
-
-	@Override
-	public Collection<ShoppingList> find(ShoppingList shoppingList) throws DaoException {
-
-		List<String[]> shoppingListRows = ShoppingListDao.fetchRows();
-
-		return shoppingListRows.stream().map(ShoppingListDao::builderShoppingList)
-				.filter(s -> s.getListName().equals(shoppingList.getListName())).collect(Collectors.toList());
-
-	}
-
-	/**
-	 * TODO Implementare la parte Update
-	 */
-
-	@Override
-	public void save(ShoppingList t) throws DaoException {
-		try {
-
-			BufferedWriter writer = new BufferedWriter(
-					new FileWriter(GetFileResource.get(fileName, folderName).toPath().toString(), true));
-			StringBuilder builder = new StringBuilder();
-
-//			if (t.getUniqueCode() == null) {
-//				t.getUniqueCode = ShoppingList.generateUniqueKey(this.getId(), this.getListName());
-//			}
-
-			if ((t.getId().equals(BigInteger.ONE)
-					|| t.getId().compareTo(SequenceManager.getInstance().getCurrentIdShoppingList()) > 0)
-					&& !find(t).contains(t)) {
-				builder.append(t.getId());
-				builder.append(fieldSeparator);
-				builder.append(t.getListName());
-				builder.append(fieldSeparator);
-				builder.append(t.getUniqueCode());
-				builder.append(fieldSeparator);
-				builder.append(System.getProperty("line.separator"));
-				writer.write(builder.toString());
-				writer.flush();
-				writer.close();
-				logger.info("ShoppingList " + t.getListName() + " salvata");
-
-			} else {
-				logger.warn("no shoppingList stored or updated!");
-			}
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			throw new DaoException(e.getMessage());
-		}
-	}
-
-	/**
-	 * TODO Scegliere tra le due versioni
-	 */
-	@Override
-	public ShoppingList get(BigInteger id) throws DaoException {
-		ShoppingListDao shoppingListDao = new ShoppingListDao();
-
-		return shoppingListDao.getAll().stream().filter(s -> s.getId().equals(id)).findFirst().get();
-		
-//		List<String[]> shoppingListRows = ShoppingListDao.fetchRows();
-//
-//		ShoppingList shoppingList = null;
-//
-//		if (!id.toString().equals("")) {
-//
-//			shoppingList = ShoppingListDao.builderShoppingList(shoppingListRows.stream()
-//					.filter(s -> s[fieldsMap.get(Fields.id.name())].equals(id.toString())).findFirst().get());
-//
-//		}
-//
-//		return user;
-
-	}
-
-	@Override
-	public Collection<ShoppingList> getAll() throws DaoException {
-		return ShoppingListDao.rowConverter(ShoppingListDao.fetchRows());
 	}
 
 	private static List<String[]> fetchRows() throws DaoException {

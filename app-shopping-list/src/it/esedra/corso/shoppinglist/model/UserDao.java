@@ -53,11 +53,38 @@ public class UserDao implements Dao<User> {
 	 */
 	@Override
 	public Collection<User> getAll() throws DaoException {
-
+	
 		List<String[]> usersRows = UserDao.fetchRows();
-
+	
 		return usersRows.stream().map(UserDao::userBuilder).collect(Collectors.toList());
+	
+	}
 
+	@Override
+	public User get(BigInteger id) throws DaoException {
+	
+		List<String[]> usersRows = UserDao.fetchRows();
+	
+		User user = null;
+	
+		if (!id.toString().equals("")) {
+	
+			user = UserDao.userBuilder(usersRows.stream()
+					.filter(s -> s[fieldsMap.get(Fields.userId.name())].equals(id.toString())).findFirst().get());
+	
+		}
+	
+		return user;
+	
+	}
+
+	@Override
+	public Collection<User> find(User t) throws DaoException {
+	
+		List<String[]> usersRows = UserDao.fetchRows();
+	
+		return usersRows.stream().map(UserDao::userBuilder).filter(s -> s.isActive()).collect(Collectors.toList());
+	
 	}
 
 	/**
@@ -66,7 +93,7 @@ public class UserDao implements Dao<User> {
 	@Override
 	public void save(User t) throws DaoException {
 		try {
-
+	
 			BufferedWriter writer = new BufferedWriter(
 					new FileWriter(GetFileResource.get(fileName, folderName).toPath().toString(), true));
 			StringBuilder builder = new StringBuilder();
@@ -94,7 +121,7 @@ public class UserDao implements Dao<User> {
 				writer.flush();
 				writer.close();
 				logger.info("User " + t.getFirstName() + " salvato");
-
+	
 			} else {
 				logger.warn("no user stored or updated!");
 			}
@@ -102,24 +129,6 @@ public class UserDao implements Dao<User> {
 			logger.error(e.getMessage());
 			throw new DaoException(e.getMessage());
 		}
-	}
-
-	@Override
-	public User get(BigInteger id) throws DaoException {
-
-		List<String[]> usersRows = UserDao.fetchRows();
-
-		User user = null;
-
-		if (!id.toString().equals("")) {
-
-			user = UserDao.userBuilder(usersRows.stream()
-					.filter(s -> s[fieldsMap.get(Fields.userId.name())].equals(id.toString())).findFirst().get());
-
-		}
-
-		return user;
-
 	}
 
 	@Override
@@ -164,19 +173,10 @@ public class UserDao implements Dao<User> {
 		}
 	}
 
-	@Override
-	public Collection<User> find(User t) throws DaoException {
-
-		List<String[]> usersRows = UserDao.fetchRows();
-
-		return usersRows.stream().map(UserDao::userBuilder).filter(s -> s.isActive()).collect(Collectors.toList());
-
-	}
-
 	private static List<String[]> fetchRows() throws DaoException {
 		try {
 			List<String> lines = Files.readAllLines(GetFileResource.get(fileName, folderName).toPath());
-
+	
 			return lines.stream().map(s -> s.split(fieldSeparator)).collect(Collectors.toList());
 		} catch (IOException e) {
 			throw new DaoException(e);
