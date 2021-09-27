@@ -17,3 +17,5 @@ src/.DS_Store
 *.prefs
 *.project
 target/
+.code-workspace
+workspace.code-workspace

@@ -40,5 +40,10 @@ public class Product {
 	public String getName() {
 		return name;
 	}
+	
+	public int hashCode() {
+		return id.intValue();
+	}
+
 
 }

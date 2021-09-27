@@ -71,7 +71,7 @@ public class ProductDao implements Dao<Product> {
 			ShoppingListProductDao slpDao = new ShoppingListProductDao();
 			ProductDao productDao = new ProductDao();
 			List<Product> products = productDao.getAll().stream().collect(Collectors.toList());
-	
+					
 			List<ShoppingListProduct> slproducts = slpDao.getAll().stream()
 					.filter(slproduct -> slproduct.getShoppingListId().equals(shoppingListId))
 					.collect(Collectors.toList());
@@ -80,6 +80,7 @@ public class ProductDao implements Dao<Product> {
 					.filter(product -> slproducts.stream()
 							.anyMatch(slproduct -> product.getid().equals(slproduct.getProductId())))
 					.collect(Collectors.toList());
+			
 		} catch (DaoException e) {
 			e.printStackTrace();
 		}

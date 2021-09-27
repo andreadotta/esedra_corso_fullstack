@@ -1,0 +1,14 @@
+{
+  "name": "Shopping list manager",
+  "short_name": "shopping list",
+  "description": "Shopping list manager",
+  "icons": [
+    {
+      "src": "/../images/icons/shopping-list.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "fullscreen"
+}
