@@ -1,0 +1,15 @@
+  
+{
+	"items": [
+		{
+			"name": "uova",
+			"qty": "2",
+			"unit": "NUMBER"
+		},
+		{
+			"name": "latte",
+			"qty": "1",
+			"unit": "L"
+		}
+	]
+}

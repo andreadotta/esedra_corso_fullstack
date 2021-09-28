@@ -1,0 +1,32 @@
+{
+	"users": [
+		{
+			"firstName": "Mario",
+			"lastName": "Bianchi",
+			"email": "mariobianchi@example.com",
+			"mobilePhone": "333444555",
+			"isActive": "true",
+			"isPrivacyConsent": "true",
+			"isNewsletter": "true"
+		},
+		{
+			"firstName": "Giuseppe",
+			"lastName": "Verdi",
+			"email": "giuseppeverdi@example.com",
+			"mobilePhone": "444666222",
+			"isActive": "true",
+			"isPrivacyConsent": "true",
+			"isNewsletter": "true"				
+		},
+		{
+			"firstName": "Filippo",
+			"lastName": "Rossi",
+			"email": "filipporossi@example.com",
+			"mobilePhone": "777444666",
+			"isActive": "true",
+			"isPrivacyConsent": "true",
+			"isNewsletter": "false"				
+		}
+		
+	]
+}

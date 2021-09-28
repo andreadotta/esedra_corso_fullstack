@@ -173,7 +173,7 @@ public class UserDao implements Dao<User> {
 		}
 	}
 
-	private static List<String[]> fetchRows() throws DaoException {
+	public static List<String[]> fetchRows() throws DaoException {
 		try {
 			List<String> lines = Files.readAllLines(GetFileResource.get(fileName, folderName).toPath());
 	
