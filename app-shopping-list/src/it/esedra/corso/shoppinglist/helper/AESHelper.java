@@ -1,6 +1,9 @@
 package it.esedra.corso.shoppinglist.helper;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -8,6 +11,8 @@ import java.util.Base64;
  
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
+
+import it.esedra.corso.shoppinglist.exceptions.StoreException;
  
 public class AESHelper {
  
@@ -63,4 +68,14 @@ public class AESHelper {
         }
         return null;
     }
+    
+    public static String generateUniqueKey(BigInteger id, String name) throws StoreException {
+		try {
+			return URLEncoder.encode(AESHelper.encrypt(id + name, "EsedraShoppingList"),
+					StandardCharsets.UTF_8.toString());
+		} catch (Exception e) {
+			throw new StoreException(e.getMessage());
+		}
+
+	}
 }

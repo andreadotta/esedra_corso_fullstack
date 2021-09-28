@@ -11,7 +11,7 @@ public interface Dao <T>{
 	public T get(BigInteger id) throws DaoException;
 	public Collection<T> getAll() throws DaoException;
 	public void delete(BigInteger id) throws DaoException;
-	public SortedSet<T> find(T t) throws DaoException; 
+	public Collection<T> find(T t) throws DaoException; 
 
 }
 	

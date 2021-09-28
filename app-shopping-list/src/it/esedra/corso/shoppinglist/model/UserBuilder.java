@@ -12,10 +12,11 @@ public class UserBuilder {
 	private boolean privacyConsent = false;
 	private boolean newsletter = false;
 	private String uniqueCode;
-	
-	public UserBuilder(String firstName, String lastName, String email, String mobilePhone, boolean isActive,
-			boolean privacyConsent, boolean newsletter, String uniqueCode) {
+
+	public UserBuilder(BigInteger userId, String firstName, String lastName, String email, String mobilePhone,
+			boolean isActive, boolean privacyConsent, boolean newsletter, String uniqueCode) {
 		super();
+		this.userId = userId;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -25,18 +26,28 @@ public class UserBuilder {
 		this.newsletter = newsletter;
 		this.uniqueCode = uniqueCode;
 	}
-	
+
 	public UserBuilder() {
-		
+
 	}
-	
+
 	public static UserBuilder builder() {
 		return new UserBuilder();
 	}
-	
+
 	public User build() {
-		return new User(userId, firstName, lastName, email, mobilePhone, isActive,
-			privacyConsent, newsletter, uniqueCode);
+		return new User(userId, firstName, lastName, email, mobilePhone, isActive, privacyConsent, newsletter,
+				uniqueCode);
+	}
+
+	public UserBuilder userId(BigInteger userId) {
+		this.userId = userId;
+		return this;
+	}
+
+	public UserBuilder uniqueCode(String uniqueCode) {
+		this.uniqueCode = uniqueCode;
+		return this;
 	}
 
 	public UserBuilder firstName(String firstName) {
@@ -44,11 +55,6 @@ public class UserBuilder {
 		return this;
 	}
 
-	public UserBuilder userId(BigInteger userId) {
-		this.userId = userId;
-		return this;
-	}
-	
 	public UserBuilder lastName(String lastName) {
 		this.lastName = lastName;
 		return this;
@@ -65,7 +71,7 @@ public class UserBuilder {
 	}
 
 	public UserBuilder active(boolean isActive) {
-		this.isActive = isActive;		
+		this.isActive = isActive;
 		return this;
 	}
 
@@ -78,12 +84,5 @@ public class UserBuilder {
 		this.newsletter = newsletter;
 		return this;
 	}
-	
-	public UserBuilder uniqueCode(String uniqueCode) {
-		this.uniqueCode = uniqueCode;
-		return this;
-	}
-	
-	
-	
+
 }

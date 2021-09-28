@@ -9,19 +9,16 @@ import java.math.BigInteger;
  */
 
 public class Product {
+	private BigInteger id;
 	private String name;
-	private Integer qty;
 	private Unit unit;
-	private String description;
-
 	public static enum Fields {
-		name, qty, unit
+		id, name, unit
 	}
 
-	public Product() {
-
-	}
-
+	
+  public Product() {}
+  
 	public Product(String name, Integer qty, Unit unit) {
 		this.name = name;
 		this.qty = qty;
@@ -29,21 +26,21 @@ public class Product {
 	}
 
 	/**
-	 * @return the description
+	 * TODO gestire la generazione dell'id
+	 * 
+	 * @param name
+	 * @param qty
+	 * @param unit
 	 */
-	public String getDescription() {
-		return description;
+
+	public Product(BigInteger id, String name, Unit unit) {
+		this.name = name;
+		this.id = id;
+		this.unit = unit;
 	}
 
-	/**
-	 * @param description the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Integer getQty() {
-		return qty;
+	public BigInteger getid() {
+		return id;
 	}
 
 	public Unit getUnit() {
@@ -53,6 +50,11 @@ public class Product {
 	public String getName() {
 		return name;
 	}
+	
+	public int hashCode() {
+		return id.intValue();
+	}
+
 
 	public void setName(String name) {
 		this.name = name;
@@ -65,5 +67,6 @@ public class Product {
 	public void setUnit(Unit unit) {
 		this.unit = unit;
 	}
+
 
 }

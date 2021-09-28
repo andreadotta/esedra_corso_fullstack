@@ -8,8 +8,8 @@ import java.util.Collection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import it.esedra.corso.shoppinglist.exceptions.DaoException;
 import it.esedra.corso.shoppinglist.model.ShoppingList;
+import it.esedra.corso.shoppinglist.model.ShoppingListDao;
 import it.esedra.corso.shoppinglist.model.User;
 import it.esedra.corso.shoppinglist.model.UserDao;
 
@@ -29,8 +29,10 @@ public final class SequenceManager {
 				instance = new SequenceManager();
 
 				UserDao userDao = new UserDao();
+				ShoppingListDao shoppingListDao  = new ShoppingListDao();
+				instance.idShoppingList = SequenceManager.findLastShoppingListId(shoppingListDao.getAll());
 				instance.idUser = SequenceManager.findLastUserId(userDao.getAll());
-				instance.idShoppingList = ShoppingList.getLastId();
+
 
 			}
 
@@ -44,7 +46,7 @@ public final class SequenceManager {
 		return getInstance().idUser;
 	}
 	
-	public BigInteger getIdShoppingList() {
+	public BigInteger getCurrentIdShoppingList() {
 		return getInstance().idShoppingList;
 	}
 
