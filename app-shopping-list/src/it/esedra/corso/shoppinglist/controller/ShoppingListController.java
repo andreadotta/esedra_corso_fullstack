@@ -1,4 +1,3 @@
-
 package it.esedra.corso.shoppinglist.controller;
 
 import java.util.Collection;
