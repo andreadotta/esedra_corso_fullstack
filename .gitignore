@@ -6,6 +6,7 @@ www/node_modules
 .loadpath
 .project
 .classpath
+.env
 node_modules
 src/.classpath
 src/.project

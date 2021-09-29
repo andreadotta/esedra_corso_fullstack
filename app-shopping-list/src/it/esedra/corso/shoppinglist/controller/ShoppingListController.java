@@ -3,6 +3,7 @@ package it.esedra.corso.shoppinglist.controller;
 
 import java.util.Collection;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,6 +15,7 @@ import it.esedra.corso.shoppinglist.model.ShoppingListDao;
 public class ShoppingListController {
 
 	ShoppingListDao dao = new ShoppingListDao();
+	@CrossOrigin
 	@GetMapping("/shoppinglists")
 	Collection<ShoppingList> all() {
 		Collection<ShoppingList> shoppingLists = null;

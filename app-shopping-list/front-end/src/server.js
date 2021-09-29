@@ -1,9 +1,12 @@
 import express from 'express';
 import path from 'path';
+import dotenv from 'dotenv'; //per leggere il file di configurazione .env
 
+dotenv.config(); //carico il file.env 
 const app = express();
 
-const port = 3000;
+const port = process.env.PORT;
+
 
 app.use(express.static(path.dirname('') + '/public/'));
 
