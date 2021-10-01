@@ -1,10 +1,10 @@
-export default class CustomTag extends HTMLElement {
+export default class ShoppingList extends HTMLElement {
 
   constructor() {
     super();
   }
   static get observedAttributes() {
-    return ['name'];
+    return ['data'];
   }
   connectedCallback(){
     if (!this.rendered) {
@@ -13,10 +13,12 @@ export default class CustomTag extends HTMLElement {
     }
   }
 
+
   render() {
     var container = document.createElement('div');
-    container.innerHTML = this.getAttribute('name');
+    const shoppingList =  JSON.parse(this.getAttribute('data'));
+    container.innerHTML = `<h2>${shoppingList.listName}</h2>`;
     this.append(container);
   }
 }
-customElements.define('custom-tag', CustomTag);
+customElements.define('shopping-list', ShoppingList);

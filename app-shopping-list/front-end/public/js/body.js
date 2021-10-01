@@ -1,10 +1,10 @@
-export default async function Body(data) {
+export default function Body(shoppingLists) {
   try {
-    const shoppingLists = await data;
+   
     return shoppingLists
-      .map((shoppingList) => `<div>${shoppingList.listName}</div>`)
+      .map((shoppingList) => `<shopping-list data='${JSON.stringify(shoppingList)}'></shopping-list>`)
       .join("");
   } catch (error) {
-    return `<div>${error}`;
+    return `<div>Errore di visualizzazione</div>`;
   }
 }
