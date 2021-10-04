@@ -22,12 +22,12 @@ public class ShoppingListController {
 	Collection<ShoppingList> all() {
 		Collection<ShoppingList> shoppingLists = null;
 		try {
-//			try {
-//				Thread.sleep(10000);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			shoppingLists = dao.getAll();
 
 		} catch (DaoException e) {

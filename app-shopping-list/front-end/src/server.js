@@ -14,5 +14,8 @@ app.get('/', (req, res) => {
   res.sendFile(path.resolve(path.dirname('') + '/public/index.html'));
 });
 
+app.get('/contact', (req, res) => {
+  res.sendFile(path.resolve(path.dirname('') + '/public/contact.html'));
+});
 
 app.listen(port, () => console.log(`in ascolto alla porta ${port}`));
