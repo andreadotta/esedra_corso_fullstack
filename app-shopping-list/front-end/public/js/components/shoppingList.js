@@ -1,3 +1,5 @@
+import {html, render} from 'https://unpkg.com/lit-html?module';
+
 export default class ShoppingList extends HTMLElement {
 
   constructor() {
@@ -15,10 +17,8 @@ export default class ShoppingList extends HTMLElement {
 
 
   render() {
-    var container = document.createElement('div');
     const shoppingList =  JSON.parse(this.getAttribute('data'));
-    container.innerHTML = `<h2>${shoppingList.listName}</h2>`;
-    this.append(container);
+    render(html`<h2>${shoppingList.listName}</h2>`, this);
   }
 }
 customElements.define('shopping-list', ShoppingList);

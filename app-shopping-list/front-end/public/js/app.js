@@ -4,6 +4,7 @@ import ShoppingList from "./components/shoppingList.js";
 import Spinner from "./components/spinner.js";
 import Home from "./pages/home.js";
 import Contact from "./pages/contact.js";
+import { html, render } from "https://unpkg.com/lit-html?module";
 
 document.addEventListener("DOMContentLoaded", init, false);
 
@@ -11,16 +12,14 @@ function init() {
   var location = window.location.pathname;
 
   function getRoute(route) {
-    switch (route) {
-      case "/":
-        new Home();
-      case "/contact":
-        new Contact();
-    }
+    var routes = {
+      "/": html`<home-page />`,
+      "/contact": "",
+    };
+    return routes[route] || routes["/"];
   }
 
-  getRoute(location);
-
+  render(getRoute(location), document.querySelector("app-page"));
 
   console.log("Start App: (" + location + ")");
 }
