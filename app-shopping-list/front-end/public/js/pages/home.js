@@ -52,10 +52,11 @@ export default class Home extends HTMLElement {
     } else if (this.error == null && this.shoppingList == null) {
       render(html`<load-spinner />`, this.content);
     } else {
-      const errorMessage = html`<div>Errore di visualizzazione: ${this.error}</div>`;
+      const errorMessage = html`<div>
+        Errore di visualizzazione: ${this.error}
+      </div>`;
       render(errorMessage, this.content);
     }
-
   }
 }
 customElements.define("home-page", Home);

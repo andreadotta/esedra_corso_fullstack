@@ -1,8 +1,13 @@
-export default function Contact() {
 
+export default class Contact extends HTMLElement {
+  constructor() {
+    super();
+  }
 
-  console.log("exec");
+  connectedCallback() {
+  }
 
+  render() {
+  }
 }
-
-
+customElements.define("contact-page", Contact);

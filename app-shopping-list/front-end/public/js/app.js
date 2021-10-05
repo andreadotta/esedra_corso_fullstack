@@ -14,7 +14,7 @@ function init() {
   function getRoute(route) {
     var routes = {
       "/": html`<home-page />`,
-      "/contact": "",
+      "/contact": html`<contact-page />`,
     };
     return routes[route] || routes["/"];
   }
