@@ -1,72 +1,67 @@
-const style = `
-.header {
-  overflow: hidden;
-  background-color: #f1f1f1;
-  padding: 20px 10px;
-}
-
-/* Style the header links */
-.header a {
-  float: left;
-  color: black;
-  text-align: center;
-  padding: 12px;
-  text-decoration: none;
-  font-size: 18px;
-  line-height: 25px;
-  border-radius: 4px;
-}
-
-/* Style the logo link (notice that we set the same value of line-height and font-size to prevent the header to increase when the font gets bigger */
-.header a.logo {
-  font-size: 25px;
-  font-weight: bold;
-}
-
-/* Change the background color on mouse-over */
-.header a:hover {
-  background-color: #ddd;
-  color: black;
-}
-
-/* Style the active/current link*/
-.header a.active {
-  background-color: dodgerblue;
-  color: white;
-}
-
-/* Float the link section to the right */
-.header-right {
-  float: right;
-}
-
-/* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */
-@media screen and (max-width: 500px) {
-  .header a {
-    float: none;
-    display: block;
-    text-align: left;
-  }
-  .header-right {
-    float: none;
-  }
-}
-`;
+import { html, render } from "https://unpkg.com/lit-html?module";
 
 export default class Header extends HTMLElement {
   connectedCallback() {
-    this.attachShadow({ mode: "open" });
-    const elem = document.createElement("div");
-    elem.innerHTML = `<div class="header">
-    <a href="#default" class="logo">Shopping List</a>
-    <div class="header-right">
-      <a class="active" href="/">Home</a>
-      <a href="/contact">Contact</a>
-      <a href="#about">About</a>
-    </div>
-    </div>
-    <style>${style}</style>`;
-    this.shadowRoot.appendChild(elem.cloneNode(true));
+    const shadow = this.attachShadow({ mode: "open" });
+    const template = document.createElement("template");
+    template.innerHTML = `<div id='header-content'></div>`;
+    shadow.appendChild(template.content.cloneNode(true));
+    this.content = shadow.getElementById("header-content");
+
+    const linkElem = document.createElement("link");
+    linkElem.setAttribute("rel", "stylesheet");
+    linkElem.setAttribute(
+      "href",
+      "https://code.getmdl.io/1.3.0/material.indigo-pink.min.css"
+    );
+    shadow.appendChild(linkElem);
+
+    const linkElemIc = document.createElement("link");
+    linkElemIc.setAttribute("rel", "stylesheet");
+    linkElemIc.setAttribute(
+      "href",
+      "https://fonts.googleapis.com/icon?family=Material+Icons"
+    );
+    shadow.appendChild(linkElemIc);
+
+    this.render();
+  }
+
+  render() {
+    const template = html`
+      <!-- Always shows a header, even in smaller screens. -->
+      <div class="mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header">
+          <div class="mdl-layout__header-row">
+            <!-- Title -->
+            <span class="mdl-layout-title">Title</span>
+            <!-- Add spacer, to align navigation to the right -->
+            <div class="mdl-layout-spacer"></div>
+            <!-- Navigation. We hide it in small screens. -->
+            <nav class="mdl-navigation mdl-layout--large-screen-only">
+              <a class="mdl-navigation__link" href="">Link</a>
+              <a class="mdl-navigation__link" href="">Link</a>
+              <a class="mdl-navigation__link" href="">Link</a>
+              <a class="mdl-navigation__link" href="">Link</a>
+            </nav>
+          </div>
+        </header>
+        <div class="mdl-layout__drawer">
+          <span class="mdl-layout-title">Title</span>
+          <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" href="">Link</a>
+            <a class="mdl-navigation__link" href="">Link</a>
+            <a class="mdl-navigation__link" href="">Link</a>
+            <a class="mdl-navigation__link" href="">Link</a>
+          </nav>
+        </div>
+        <main class="mdl-layout__content">
+          <div class="page-content"><!-- Your content goes here --></div>
+        </main>
+      </div>
+    `;
+    render(template, this.content);
+
   }
 }
 customElements.define("app-header", Header);

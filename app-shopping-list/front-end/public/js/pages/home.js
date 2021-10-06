@@ -3,16 +3,30 @@ import ShoppingList from "../components/shoppingList.js";
 import LoadSpinner from "../components/spinner.js";
 
 const template = document.createElement("template");
-template.innerHTML = `<div id='content'></div>`;
+template.innerHTML = `<div id='home-content'></div>`;
 
 export default class Home extends HTMLElement {
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-    this.shadowRoot.appendChild(template.content.cloneNode(true));
-    this.content = this.shadowRoot.getElementById("content");
+    const shadow = this.attachShadow({ mode: "open" });
+    shadow.appendChild(template.content.cloneNode(true));
+    this.content = shadow.getElementById("home-content");
     this.error = null;
     this.shoppingList = null;
+
+    const linkElem = document.createElement('link');
+    linkElem.setAttribute('rel', 'stylesheet');
+    linkElem.setAttribute('href', 'https://code.getmdl.io/1.3.0/material.indigo-pink.min.css');
+    shadow.appendChild(linkElem);
+
+    const linkElemIc = document.createElement('link');
+    linkElemIc.setAttribute('rel', 'stylesheet');
+    linkElemIc.setAttribute('href', 'https://fonts.googleapis.com/icon?family=Material+Icons');
+    shadow.appendChild(linkElemIc);
+
+    
+
+
   }
 
   connectedCallback() {
@@ -23,7 +37,7 @@ export default class Home extends HTMLElement {
         throw new Error("Fetch shopping list error :" + data.status);
       }
 
-      const shoppinglists = await data.json();
+      const shoppinglists = data.json();
 
       return shoppinglists;
     }
@@ -44,11 +58,13 @@ export default class Home extends HTMLElement {
     if (this.error == null && this.shoppingList != null) {
       const template = this.shoppingList.map(
         (shoppingList) =>
-          html`<shopping-list
+          html`<div class="mdl-cell mdl-cell--4-col"><shopping-list
             data="${JSON.stringify(shoppingList)}"
-          ></shopping-list>`
+          ></shopping-list></div>`
       );
-      render(template, this.content);
+      render(html`<div class="mdl-grid">
+      ${template}
+    </div>`, this.content);
     } else if (this.error == null && this.shoppingList == null) {
       render(html`<load-spinner />`, this.content);
     } else {

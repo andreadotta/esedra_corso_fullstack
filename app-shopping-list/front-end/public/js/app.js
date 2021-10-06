@@ -18,7 +18,7 @@ function init() {
     };
     return routes[route] || routes["/"];
   }
-
+  
   render(getRoute(location), document.querySelector("app-page"));
 
   console.log("Start App: (" + location + ")");
