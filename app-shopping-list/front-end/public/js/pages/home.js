@@ -31,33 +31,52 @@ export default class Home extends HTMLElement {
     shadow.appendChild(linkElemIc);
   }
 
-  connectedCallback() {
+  static get observedAttributes() {
+    return ["sl"];
+  }
+
+  // Respond to attribute changes.
+  attributeChangedCallback(attr, oldValue, newValue) {
+    this.render();
+  }
+
+  async connectedCallback() {
+    this.setAttribute("sl", null);
+
+    const hanldeError = function (err) {
+      console.log(err);
+      return {
+        ok: false,
+        statusText: err.message,
+      };
+    };
     async function getShoppingLists() {
-      const data = await fetch("http://localhost:8081/shoppinglists");
+      const data = await fetch("http://localhost:8081/shoppinglists").catch(
+        hanldeError
+      );
+
       if (!data.ok) {
         return {
           status: "ko",
           result: null,
-          message: "Fetch shopping list error :" + data.status,
+          message: "Fetch shopping list error :" + data.statusText,
         };
       }
-      const shoppinglists = data.json();
+      const shoppinglists = await data.json();
       return {
         status: "ok",
-        result: await shoppinglists,
+        result: shoppinglists,
         message: null,
       };
     }
-    getShoppingLists().then((e) => {
-      this.shoppingList = e.result;
-      this.render();
-    });
-    this.render();
+
+    this.setAttribute("sl", JSON.stringify(await getShoppingLists()));
   }
 
   render() {
-    if (this.error == null && this.shoppingList != null) {
-      const template = this.shoppingList.map(
+    this.shoppingList = JSON.parse(this.getAttribute("sl"));
+    if (this.shoppingList != null && this.shoppingList.status != "ko") {
+      const template = this.shoppingList.result.map(
         (shoppingList) =>
           html`<div class="mdl-cell mdl-cell--4-col">
             <shopping-list
@@ -66,11 +85,11 @@ export default class Home extends HTMLElement {
           </div>`
       );
       render(html`<div class="mdl-grid">${template}</div>`, this.content);
-    } else if (this.error == null && this.shoppingList == null) {
+    } else if (this.shoppingList == null) {
       render(html`<load-spinner />`, this.content);
     } else {
       const errorMessage = html`<div>
-        Errore di visualizzazione: ${this.error}
+        Errore di visualizzazione: ${this.shoppingList.message}
       </div>`;
       render(errorMessage, this.content);
     }
