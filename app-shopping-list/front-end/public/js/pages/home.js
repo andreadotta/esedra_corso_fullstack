@@ -14,43 +14,44 @@ export default class Home extends HTMLElement {
     this.error = null;
     this.shoppingList = null;
 
-    const linkElem = document.createElement('link');
-    linkElem.setAttribute('rel', 'stylesheet');
-    linkElem.setAttribute('href', 'https://code.getmdl.io/1.3.0/material.indigo-pink.min.css');
+    const linkElem = document.createElement("link");
+    linkElem.setAttribute("rel", "stylesheet");
+    linkElem.setAttribute(
+      "href",
+      "https://code.getmdl.io/1.3.0/material.indigo-pink.min.css"
+    );
     shadow.appendChild(linkElem);
 
-    const linkElemIc = document.createElement('link');
-    linkElemIc.setAttribute('rel', 'stylesheet');
-    linkElemIc.setAttribute('href', 'https://fonts.googleapis.com/icon?family=Material+Icons');
+    const linkElemIc = document.createElement("link");
+    linkElemIc.setAttribute("rel", "stylesheet");
+    linkElemIc.setAttribute(
+      "href",
+      "https://fonts.googleapis.com/icon?family=Material+Icons"
+    );
     shadow.appendChild(linkElemIc);
-
-    
-
-
   }
 
   connectedCallback() {
     async function getShoppingLists() {
       const data = await fetch("http://localhost:8081/shoppinglists");
-
       if (!data.ok) {
-        throw new Error("Fetch shopping list error :" + data.status);
+        return {
+          status: "ko",
+          result: null,
+          message: "Fetch shopping list error :" + data.status,
+        };
       }
-
       const shoppinglists = data.json();
-
-      return shoppinglists;
+      return {
+        status: "ok",
+        result: await shoppinglists,
+        message: null,
+      };
     }
-    getShoppingLists()
-      .then((data) => {
-        this.error = null;
-        this.shoppingList = data;
-        this.render();
-      })
-      .catch((error) => {
-        this.error = error;
-        this.render();
-      });
+    getShoppingLists().then((e) => {
+      this.shoppingList = e.result;
+      this.render();
+    });
     this.render();
   }
 
@@ -58,13 +59,13 @@ export default class Home extends HTMLElement {
     if (this.error == null && this.shoppingList != null) {
       const template = this.shoppingList.map(
         (shoppingList) =>
-          html`<div class="mdl-cell mdl-cell--4-col"><shopping-list
-            data="${JSON.stringify(shoppingList)}"
-          ></shopping-list></div>`
+          html`<div class="mdl-cell mdl-cell--4-col">
+            <shopping-list
+              data="${JSON.stringify(shoppingList)}"
+            ></shopping-list>
+          </div>`
       );
-      render(html`<div class="mdl-grid">
-      ${template}
-    </div>`, this.content);
+      render(html`<div class="mdl-grid">${template}</div>`, this.content);
     } else if (this.error == null && this.shoppingList == null) {
       render(html`<load-spinner />`, this.content);
     } else {
