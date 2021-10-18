@@ -102,11 +102,56 @@ customElements.define(
     constructor() {
       super();
       const elem = document.createElement("div");
-      var sn = this.attachShadow({ mode: "open" });
-      sn.appendChild(elem.cloneNode(true));
+      var shadow = this.attachShadow({ mode: "open" });
+      shadow.appendChild(elem.cloneNode(true));
+      const linkElem = document.createElement("link");
+      linkElem.setAttribute("rel", "stylesheet");
+      linkElem.setAttribute(
+        "href",
+        "https://code.getmdl.io/1.3.0/material.indigo-pink.min.css"
+      );
+      shadow.appendChild(linkElem);
+
+      const linkElemIc = document.createElement("link");
+      linkElemIc.setAttribute("rel", "stylesheet");
+      linkElemIc.setAttribute(
+        "href",
+        "https://fonts.googleapis.com/icon?family=Material+Icons"
+      );
+      shadow.appendChild(linkElemIc);
+      this.content = elem;
+      this.shadow = shadow;
     }
     data(data) {
       console.log(data);
+      render(
+        html`<div>${data.listName}</div>
+
+          <table
+            class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp"
+          >
+            <thead>
+              <tr>
+                <th class="mdl-data-table__cell--non-numeric">Id</th>
+                <th>Name</th>
+                <th>Unit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <list-products ></list-products>
+            ${data.products.forEach(product => {
+              render(html`<tr>
+                <td class="mdl-data-table__cell--non-numeric">
+                  Acrylic (Transparent)
+                </td>
+                <td>25</td>
+                <td>$2.90</td>
+              </tr>`, this.shadow.querySelector("list-products"))
+            }) }
+            </tbody>
+          </table> `,
+        this.shadow
+      );
     }
   }
 );

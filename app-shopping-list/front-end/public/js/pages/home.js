@@ -1,7 +1,7 @@
 import { html, render } from "https://unpkg.com/lit-html?module";
 import ShoppingList from "../components/shoppingList.js";
 import LoadSpinner from "../components/spinner.js";
-
+import { thestate } from "../components/state.js";
 const template = document.createElement("template");
 template.innerHTML = `<div id='home-content'></div>`;
 
@@ -69,6 +69,7 @@ export default class Home extends HTMLElement {
         message: null,
       };
     }
+    //thestate(this);
 
     this.setAttribute("sl", JSON.stringify(await getShoppingLists()));
   }

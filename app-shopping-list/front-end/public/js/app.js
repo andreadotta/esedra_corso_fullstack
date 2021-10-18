@@ -22,4 +22,7 @@ function init() {
   render(getRoute(location), document.querySelector("app-page"));
 
   console.log("Start App: (" + location + ")");
+
 }
+
+
